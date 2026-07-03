@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suta Dhamma Diploma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Suta Dhamma">
+    <meta name="theme-color" content="#ffd04a">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/LDh3jzBD/Sayadaw-nandamalabhivamsa.jpg">
+    <style>
+        :root {
+            --gold: #ffd04a;
+            --gold-light: #ffe98a;
+            --gold-dim: #c49a1a;
+            --deep: #0d0a1a;
+            --surface: #15112a;
+            --surface2: #1e1838;
+            --border: rgba(255,208,74,0.3);
+            --text: #f5eedc;
+            --text-dim: #b0a888;
+            --primary: #ffd04a;
+            --ruby: #e0445a;
+        }
+
+        [data-theme="light"] {
+            --deep: #f5f0e8;
+            --surface: #fffdf7;
+            --surface2: #f0e8d4;
+            --border: rgba(180,130,0,0.25);
+            --text: #1a1000;
+            --text-dim: #6a5020;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans Myanmar', sans-serif;
+            background: var(--deep);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        /* Decorative background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 20% 10%, rgba(255,208,74,0.13) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(130,70,220,0.13) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── SPLASH ── */
+        #splash {
+            position: fixed; inset: 0;
+            background: #08051a;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 99999;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+        #splash.hide-splash {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-ring {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            background: linear-gradient(#08051a, #08051a) padding-box,
+                        linear-gradient(135deg, var(--gold), #9a50ff, var(--gold)) border-box;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+            animation: pulse-ring 2s ease infinite;
+            position: relative;
+        }
+        .splash-ring img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
+        .splash-ring::after {
+            content: ''; position: absolute; inset: -8px; border-radius: 50%;
+            border: 1px solid rgba(201,168,76,0.2);
+            animation: pulse-ring 2s ease infinite 0.5s;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); }
+        }
+        .splash-title { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.1rem; letter-spacing: 3px; text-transform: uppercase; }
+        .splash-sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 8px; }
+        .splash-bar {
+            width: 160px; height: 2px; background: rgba(201,168,76,0.2);
+            margin-top: 32px; border-radius: 2px; overflow: hidden;
+        }
+        .splash-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light));
+            border-radius: 2px;
+            animation: bar-fill 2.8s ease forwards;
+        }
+        @keyframes bar-fill { to { width: 100%; } }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(13,10,26,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        [data-theme="light"] nav { background: rgba(255,253,247,0.88); }
+
+        .nav-inner {
+            max-width: 640px; margin: 0 auto;
+            padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-left { display: flex; align-items: center; gap: 14px; }
+        .logo-ring {
+            width: 46px; height: 46px; border-radius: 50%;
+            border: 2px solid var(--gold);
+            overflow: hidden; flex-shrink: 0;
+        }
+        .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-titles strong { display: block; font-size: 1rem; color: var(--text); }
+        .nav-titles span { font-size: 0.75rem; color: var(--gold); letter-spacing: 1px; }
+
+        .theme-btn {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 50%; width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.1rem; transition: 0.3s;
+        }
+        .theme-btn:hover { border-color: var(--gold); transform: rotate(20deg); }
+
+        /* ── MAIN ── */
+        .container { max-width: 640px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+        .hero {
+            text-align: center;
+            padding: 48px 0 36px;
+        }
+        .hero-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 2.8rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.3;
+            text-shadow: 0 0 50px rgba(255,208,74,0.5), 0 0 100px rgba(255,208,74,0.2);
+        }
+        .hero-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 20px auto; max-width: 260px;
+        }
+        .hero-divider::before, .hero-divider::after {
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-dim));
+        }
+        .hero-divider::after { background: linear-gradient(to left, transparent, var(--gold-dim)); }
+        .hero-divider span { color: var(--gold); font-size: 1rem; }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex; gap: 8px;
+            margin-bottom: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 6px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1; min-width: calc(33% - 8px); padding: 10px 8px;
+            border: none; border-radius: 12px;
+            background: transparent; color: var(--text-dim);
+            font-family: 'Noto Sans Myanmar', sans-serif;
+            font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: #0d0a1a;
+            box-shadow: 0 4px 20px rgba(255,208,74,0.45);
+        }
+        .tab-btn:not(.active):hover { color: var(--gold); }
+
+        /* ── LESSON CARDS ── */
+        #list { padding-bottom: 40px; }
+
+        .lesson-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .lesson-card:hover {
+            border-color: rgba(255,208,74,0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(255,208,74,0.12);
+        }
+
+        .card-top {
+            display: flex; align-items: center; gap: 16px;
+            padding: 16px 18px;
+            cursor: pointer;
+        }
+        .num-box {
+            min-width: 40px; height: 40px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--surface2), var(--deep));
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: var(--gold); font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .lesson-text { color: var(--text); font-weight: 600; font-size: 1rem; flex: 1; }
+        .card-arrow { color: var(--text-dim); font-size: 1.1rem; transition: transform 0.3s; }
+        .lesson-card:hover .card-arrow { transform: translateX(4px); color: var(--gold); }
+
+        /* Download buttons bar */
+        .card-actions {
+            display: flex; gap: 0;
+            border-top: 1px solid var(--border);
+        }
+        .dl-btn {
+            flex: 1; padding: 11px 12px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            border: none; background: transparent;
+            color: var(--text-dim); font-family: 'Noto Sans Myanmar', sans-serif;
+            font-size: 0.82rem; cursor: pointer;
+            transition: background 0.25s, color 0.25s;
+            text-decoration: none;
+        }
+        .dl-btn:first-child { border-right: 1px solid var(--border); }
+        .dl-btn:hover { background: rgba(201,168,76,0.08); color: var(--gold); }
+        .dl-btn .dl-icon { font-size: 1rem; }
+
+        /* ── PLAYER PAGE ── */
+        #player-page {
+            position: fixed; inset: 0;
+            background: var(--deep);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+        #player-page.hidden { display: none; }
+
+        .player-inner { max-width: 640px; margin: 0 auto; padding: 20px 20px 60px; }
+
+        .player-header {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 24px;
+        }
+        .close-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--text); font-size: 1.1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: 0.2s;
+        }
+        .close-btn:hover { border-color: var(--ruby); color: var(--ruby); }
+        .player-title-wrap { flex: 1; }
+        .player-label { font-size: 0.7rem; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
+        #p-title { font-size: 1.1rem; color: var(--text); font-weight: 600; }
+
+        /* Custom Audio Player */
+        .audio-wrap {
+            background: linear-gradient(135deg, #1a1530, #0f0c20);
+            border: 1px solid rgba(255,208,74,0.35);
+            border-radius: 20px;
+            padding: 20px 20px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 40px rgba(255,208,74,0.08);
+        }
+        .cp-time-row {
+            display: flex; justify-content: space-between;
+            font-size: 0.78rem; color: var(--gold); font-weight: 600;
+            margin-bottom: 8px; letter-spacing: 0.5px;
+        }
+        .cp-seek-wrap {
+            margin-bottom: 18px; cursor: pointer; padding: 6px 0;
+        }
+        .cp-seek-bg {
+            height: 5px; border-radius: 99px;
+            background: rgba(255,208,74,0.15);
+            position: relative;
+        }
+        .cp-seek-fill {
+            height: 100%; border-radius: 99px; width: 0%;
+            background: linear-gradient(90deg, #c49a1a, #ffd04a, #ffe98a);
+            transition: width 0.2s linear;
+            position: relative;
+        }
+        .cp-seek-thumb {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #ffd04a;
+            box-shadow: 0 0 8px rgba(255,208,74,0.8);
+            position: absolute; top: 50%; left: 0%;
+            transform: translate(-50%, -50%);
+            transition: left 0.2s linear;
+            pointer-events: none;
+        }
+        .cp-controls {
+            display: flex; align-items: center; gap: 10px; justify-content: center;
+        }
+        .cp-btn {
+            border: none; cursor: pointer; font-family: 'Noto Sans Myanmar', sans-serif;
+            font-weight: 700; transition: all 0.2s; border-radius: 12px;
+        }
+        .cp-play {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, #c49a1a, #ffd04a);
+            color: #0d0a1a; font-size: 1.3rem;
+            box-shadow: 0 0 20px rgba(255,208,74,0.45);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cp-play:hover { box-shadow: 0 0 32px rgba(255,208,74,0.7); transform: scale(1.07); }
+        .cp-skip {
+            background: rgba(255,208,74,0.1); color: var(--gold);
+            border: 1px solid rgba(255,208,74,0.25);
+            padding: 8px 14px; font-size: 0.78rem;
+        }
+        .cp-skip:hover { background: rgba(255,208,74,0.2); }
+        .cp-vol-wrap {
+            display: flex; align-items: center; gap: 6px; margin-left: auto;
+        }
+        .cp-vol-icon { cursor: pointer; font-size: 1rem; }
+        .cp-vol {
+            -webkit-appearance: none; appearance: none;
+            width: 70px; height: 4px; border-radius: 99px;
+            background: rgba(255,208,74,0.2); outline: none; cursor: pointer;
+        }
+        .cp-vol::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 13px; height: 13px;
+            border-radius: 50%; background: var(--gold);
+            box-shadow: 0 0 6px rgba(255,208,74,0.6);
+        }
+
+        /* Player download buttons */
+        .player-downloads {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        .pdl-btn {
+            flex: 1; padding: 12px 16px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            border-radius: 14px; text-decoration: none;
+            font-family: 'Noto Sans Myanmar', sans-serif;
+            font-size: 0.85rem; font-weight: 600;
+            transition: all 0.25s; border: 1px solid var(--border);
+        }
+        .pdl-audio {
+            background: rgba(255,208,74,0.15); color: var(--gold);
+            border-color: rgba(255,208,74,0.45);
+        }
+        .pdl-audio:hover { background: rgba(255,208,74,0.28); box-shadow: 0 4px 20px rgba(255,208,74,0.3); }
+        .pdl-pdf {
+            background: rgba(140,80,255,0.15); color: #c49aff;
+            border-color: rgba(140,80,255,0.4);
+        }
+        .pdl-pdf:hover { background: rgba(140,80,255,0.28); box-shadow: 0 4px 20px rgba(140,80,255,0.3); }
+
+        .pdf-label { font-size: 0.7rem; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+        #pdf-wrap {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--surface);
+            position: relative;
+            min-height: 72vh;
+        }
+        .pdf-viewer {
+            width: 100%; height: 72vh;
+            border: none;
+            display: block;
+        }
+        #pdf-loading {
+            position: absolute;
+            inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: var(--surface);
+            z-index: 10;
+            transition: opacity 0.4s ease;
+        }
+        #pdf-loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .pdf-spinner {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 3px solid rgba(255,208,74,0.2);
+            border-top-color: var(--gold);
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .pdf-action-btn {
+            display: inline-block; padding: 10px 22px;
+            background: rgba(255,208,74,0.1);
+            color: var(--gold); border: 1px solid rgba(255,208,74,0.35);
+            border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; text-decoration: none;
+            font-family: 'Noto Sans Myanmar', sans-serif;
+            transition: background 0.2s;
+        }
+        .pdf-action-btn:hover { background: rgba(255,208,74,0.2); }
+        .pdf-action-gold {
+            background: linear-gradient(135deg,#c49a1a,#ffd04a);
+            color: #0d0a1a; border: none;
+        }
+        .pdf-action-gold:hover { opacity: 0.9; }
+
+        /* Animations on load */
+        .lesson-card { animation: card-in 0.35s ease both; }
+        @keyframes card-in {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .img-fix { width: 100%; height: 100%; object-fit: cover; display: block; }
+    </style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+    <div class="splash-ring">
+        <img src="https://i.ibb.co/LDh3jzBD/Sayadaw-nandamalabhivamsa.jpg" alt="logo">
+    </div>
+    <div class="splash-title">University of Wisdom Land</div>
+    <div class="splash-sub">သုတဓမ္မ ဒီပလိုမာ</div>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <div class="nav-left">
+            <div class="logo-ring">
+                <img src="https://i.ibb.co/LDh3jzBD/Sayadaw-nandamalabhivamsa.jpg" alt="logo" class="img-fix">
+            </div>
+            <div class="nav-titles">
+                <strong>Suta Dhamma Diploma</strong>
+                <span>University Of Wisdom Land</span>
+            </div>
+        </div>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<main class="container">
+    <div class="hero">
+        <div class="hero-label">Diploma Course</div>
+        <h1 class="hero-title">သုတဓမ္မ ဒီပလိုမာ</h1>
+        <div class="hero-divider"><span>❋</span></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="b1" onclick="load(1)">Level 1</button>
+        <button class="tab-btn" id="b2" onclick="load(2)">Level 2</button>
+        <button class="tab-btn" id="b3" onclick="load(3)">Level 3</button>
+        <button class="tab-btn" id="b-shop" onclick="openShop()">📚 စာအုပ်ဆိုင်</button>
+        <button class="tab-btn" id="b-center" onclick="openCenter()">📍 စာဖြေဌာန</button>
+    </div>
+
+    <div id="list"></div>
+
+    <!-- SHOP TAB CONTENT -->
+    <div id="shop-page" style="display:none;padding-bottom:40px;">
+      <!-- Search bar -->
+      <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin:8px 0 14px;">
+        <span style="font-size:1rem;color:var(--text-dim);">🔍</span>
+        <input id="sh-search" type="text" placeholder="Search books..." oninput="renderBooks()" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.88rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),var(--gold));flex-shrink:0;"></div>
+      </div>
+
+      <!-- Filter chips -->
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;margin-bottom:6px;">
+        <button class="shop-chip active" data-filter="all" onclick="setShopFilter('all',this)" style="flex-shrink:0;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#0d0a1a;font-weight:700;font-family:'Noto Sans Myanmar',sans-serif;font-size:0.78rem;cursor:pointer;">All Result</button>
+        <button class="shop-chip" data-filter="level" onclick="setShopFilter('level',this)" style="flex-shrink:0;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.78rem;cursor:pointer;">Diploma</button>
+        <button class="shop-chip" data-filter="dhamma" onclick="setShopFilter('dhamma',this)" style="flex-shrink:0;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.78rem;cursor:pointer;">Dhamma Books</button>
+      </div>
+
+      <!-- Book grid -->
+      <div id="book-list" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;"></div>
+
+      <!-- Floating cart bar (shows when books selected) -->
+      <div id="sh-cart-bar" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;max-width:600px;margin:0 auto;background:var(--surface);border:1px solid var(--gold);border-radius:16px;padding:14px 18px;box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:500;align-items:center;justify-content:space-between;">
+        <div>
+          <div id="sh-cart-count" style="font-size:0.8rem;color:var(--text-dim);">0 books selected</div>
+          <div id="sh-cart-total" style="font-size:1rem;font-weight:700;color:var(--gold);">0 ကျပ်</div>
+        </div>
+        <button onclick="openOrderModal()" style="padding:12px 22px;background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#0d0a1a;border:none;border-radius:12px;font-size:0.88rem;font-weight:700;font-family:'Noto Sans Myanmar',sans-serif;cursor:pointer;">🛒 Order တင်မည်</button>
+      </div>
+    </div>
+
+    <!-- ORDER MODAL -->
+    <div id="order-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:900;align-items:flex-end;justify-content:center;">
+      <div id="order-modal" style="width:100%;max-width:600px;max-height:88vh;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:22px 20px 28px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:1rem;font-weight:700;color:var(--gold);">🛒 Order Form</div>
+          <div onclick="closeOrderModal()" style="width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-dim);">✕</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:4px;">နာမည် *</label>
+            <input id="sh-name" type="text" placeholder="နာမည်ထည့်ပါ" style="width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.88rem;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:4px;">ဖုန်းနံပါတ် *</label>
+            <input id="sh-phone" type="tel" placeholder="09xxxxxxxxx" style="width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.88rem;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:4px;">လိပ်စာ *</label>
+            <textarea id="sh-address" placeholder="လိပ်စာ အပြည့်အစုံထည့်ပါ" rows="3" style="width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.88rem;outline:none;resize:none;"></textarea>
+          </div>
+          <div>
+            <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:4px;">ရွေးထားသော စာအုပ်များ</label>
+            <div id="sh-selected-books" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:0.83rem;color:var(--text-dim);min-height:40px;">အပေါ်မှ စာအုပ်ရွေးပါ ↑</div>
+          </div>
+          <div>
+            <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:4px;">မှတ်ချက် (ရှိရင်)</label>
+            <input id="sh-note" type="text" placeholder="အပိုတောင်းဆိုချက်" style="width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Noto Sans Myanmar',sans-serif;font-size:0.88rem;outline:none;">
+          </div>
+        </div>
+
+        <!-- PAYMENT SECTION -->
+        <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:18px;">
+          <div style="font-size:0.95rem;font-weight:700;color:var(--gold);margin-bottom:14px;">💳 ငွေလွှဲပါ</div>
+
+          <!-- KBZ Pay -->
+          <div id="pay-kbz" onclick="selectPayment('kbz')" style="display:flex;align-items:center;gap:12px;padding:13px 15px;background:var(--surface2);border:2px solid var(--border);border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#00AEEF;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">🏦</div>
+            <div style="flex:1;">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--text);">KBZ Pay</div>
+              <div id="pay-kbz-info" style="font-size:0.8rem;color:var(--text-dim);margin-top:2px;">…</div>
+            </div>
+            <div id="pcheck-kbz" style="width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all 0.2s;"></div>
+          </div>
+
+          <!-- Wave Pay -->
+          <div id="pay-wave" onclick="selectPayment('wave')" style="display:flex;align-items:center;gap:12px;padding:13px 15px;background:var(--surface2);border:2px solid var(--border);border-radius:12px;margin-bottom:16px;cursor:pointer;transition:all 0.2s;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#F7941D;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">🌊</div>
+            <div style="flex:1;">
+              <div style="font-size:0.85rem;font-weight:700;color:var(--text);">Wave Pay</div>
+              <div id="pay-wave-info" style="font-size:0.8rem;color:var(--text-dim);margin-top:2px;">…</div>
+            </div>
+            <div id="pcheck-wave" style="width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all 0.2s;"></div>
+          </div>
+
+          <!-- Screenshot upload -->
+          <label style="font-size:0.8rem;color:var(--text-dim);display:block;margin-bottom:6px;">💰 လွှဲပြီးသား Screenshot တင်ပါ *</label>
+          <label for="sh-screenshot" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;background:var(--surface2);border:2px dashed var(--border);border-radius:12px;cursor:pointer;transition:border-color 0.2s;" id="screenshot-label">
+            <span style="font-size:1.6rem;">📷</span>
+            <span id="screenshot-text" style="font-size:0.82rem;color:var(--text-dim);">ဒီနေရာကို နှိပ်ပြီး ပုံတင်ပါ</span>
+            <input id="sh-screenshot" type="file" accept="image/*" style="display:none;" onchange="onScreenshot(this)">
+          </label>
+          <div id="screenshot-preview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;">
+            <img id="screenshot-img" style="width:100%;border-radius:10px;max-height:200px;object-fit:contain;background:rgba(0,0,0,0.2);">
+          </div>
+        </div>
+
+        <div style="margin-top:16px;padding:12px 14px;background:rgba(255,208,74,0.07);border:1px solid rgba(255,208,74,0.2);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.85rem;color:var(--text-dim);">စုစုပေါင်း</span>
+          <span id="sh-total" style="font-size:1.05rem;font-weight:700;color:var(--gold);">0 ကျပ်</span>
+        </div>
+        <button id="sh-submit-btn" onclick="submitOrder()" style="width:100%;margin-top:16px;padding:14px;background:linear-gradient(135deg,#c49a1a,#ffd04a);color:#0d0a1a;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;font-family:'Noto Sans Myanmar',sans-serif;cursor:pointer;">
+          📨 Order တင်မည်
+        </button>
+        <div id="sh-msg" style="text-align:center;margin-top:12px;font-size:0.85rem;display:none;"></div>
+      </div>
+    </div>
+
+    <!-- EXAM CENTER TAB CONTENT -->
+    <div id="center-page" style="display:none;padding-bottom:40px;">
+
+      <!-- Header -->
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:2rem;margin-bottom:8px;">📍</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--gold);">စာဖြေဌာနများ</div>
+        <div style="font-size:0.8rem;color:var(--text-dim);margin-top:4px;">စုစုပေါင်း ၅၀ ဌာန</div>
+      </div>
+
+      <!-- Region list -->
+      <div id="region-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+    </div>
+</main>
+
+<!-- PLAYER PAGE -->
+<div id="player-page" class="hidden">
+    <div class="player-inner">
+        <div class="player-header">
+            <button class="close-btn" onclick="closePlayer()">✕</button>
+            <div class="player-title-wrap">
+                <div class="player-label">Now Playing</div>
+                <div id="p-title">Title</div>
+            </div>
+        </div>
+
+        <div class="audio-wrap">
+            <audio id="audio"></audio>
+            <div class="cp-time-row">
+                <span id="cp-cur">0:00</span>
+                <span id="cp-dur">0:00</span>
+            </div>
+            <div class="cp-seek-wrap" id="cp-seek-wrap">
+                <div class="cp-seek-bg">
+                    <div class="cp-seek-fill" id="cp-fill"></div>
+                    <div class="cp-seek-thumb" id="cp-thumb"></div>
+                </div>
+            </div>
+            <div class="cp-controls">
+                <button class="cp-btn cp-skip" onclick="skipAudio(-10)">⏮ 10s</button>
+                <button class="cp-btn cp-play" id="cp-play" onclick="togglePlay()">▶</button>
+                <button class="cp-btn cp-skip" onclick="skipAudio(10)">10s ⏭</button>
+                <div class="cp-vol-wrap">
+                    <span class="cp-vol-icon" id="cp-vol-icon" onclick="toggleMute()">🔊</span>
+                    <input type="range" class="cp-vol" id="cp-vol" min="0" max="1" step="0.05" value="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="player-downloads">
+            <a id="dl-audio" href="#" download class="pdl-btn pdl-audio">
+                <span>🎵</span> Audio Download
+            </a>
+            <a id="dl-pdf" href="#" download class="pdl-btn pdl-pdf">
+                <span>📄</span> PDF Download
+            </a>
+        </div>
+
+        <div class="pdf-label">📖 Lesson Notes</div>
+        <div id="pdf-wrap">
+            <div id="pdf-loading">
+                <div class="pdf-spinner"></div>
+                <div style="color:var(--text-dim); font-size:0.85rem; margin-top:12px;">PDF တင်နေသည်...</div>
+                <button onclick="reloadPdf()" class="pdf-action-btn" style="margin-top:16px;">🔄 Reload</button>
+            </div>
+            <iframe id="pdf" class="pdf-viewer"></iframe>
+            <div id="pdf-error" style="display:none; text-align:center; padding:30px 20px; flex-direction:column; align-items:center;">
+                <div style="font-size:2.5rem; margin-bottom:12px;">📄</div>
+                <div style="color:var(--text-dim); font-size:0.85rem; margin-bottom:20px;">PDF ဖွင့်မရပါ။</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                    <button onclick="reloadPdf()" class="pdf-action-btn">🔄 Reload</button>
+                    <a id="pdf-open-btn" href="#" target="_blank" class="pdf-action-btn pdf-action-gold">🔗 Browser မှာဖွင့်</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── BACKEND API CONFIG ─────────────────────────────────
+    // ဒီမှာ Google Apps Script ကို Web App အနေနဲ့ Deploy လုပ်ပြီးရရှိတဲ့ URL ကို ထည့်ပါ
+    // e.g. https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxOl-tzyBKLdV-oF8Vz_ybInzBkFEYZ65ucpyxPIyEDcB6kzBXJPUhsJfs12wncuYbQ/exec';
+    // ────────────────────────────────────────────────────────
+
+    const lessonData = {
+        1: [
+            { t: "ဘဝခရီးဝယ်ရွေးချယ်ရမည့်လမ်း", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/001-UOWL-Sutadhamma-2007-07-25-bawakhayeewair.mp3", p: "https://dhammadownload.com/File-Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/UOWL-A4-Book1.pdf" },
+            { t: "မေတ္တသုတ်အနှစ်ချုပ်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/004-UOWL-Sutadhamma-2009-12-20-MettaThoatAhNhitChoke.mp3", p: "https://gtg-drnandamala.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2022/01/14023742/%E1%80%99%E1%80%B1%E1%80%90%E1%80%B9%E1%80%90%E1%80%AC%E1%80%9E%E1%80%AF%E1%80%90%E1%80%BA%E1%80%A1%E1%80%94%E1%80%BE%E1%80%85%E1%80%BA%E1%80%81%E1%80%BB%E1%80%AF%E1%80%95%E1%80%BA.pdf" },
+            { t: "စိတ်၏အညစ်အကြေးများကို ဖယ်ရှားခြင်း", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/003-UOWL-Sutadhamma-2011-02-13-SateEiAhNyitAhKayeMyar.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/06/56-Dr-Nandamala-SaitEiAhNyitAhKayeMyarKoPawelSharChin.pdf" },
+            { t: "မြတ်ဗုဒ္ဒဒေသနာနှင့်‌ယနေ့ကမ္ဘာ", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/002-UOWL-Sutadhamma-MyatBuddhaNhitYaNaeKabar.mp3", p: "https://dhammadownload.com/File-Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/UOWL-A4-Book2.pdf" },
+            { t: "သမထနှင့် ဝိပဿနာ", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/005-UOWL-Sutadhamma-2008-12-18-samatha-and-vipassana.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/06/Dr-Nandamalabhivamsa-ThaMaHtaNhintWiPaThaNar-compressed.pdf" }
+        ],
+        2: [
+            { t: "ဓမ္မအသိဖြင့် အကျိုးရှိရှိနေမည်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/006-UOWL-Sutadhamma-2008-10-18-DhammaAhTheatPhyint.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/006-Dr-Nandamalabhivamsa-DhammarAThiPhinAkyoChiChiNayMyi.pdf" },
+            { t: "စိတ်၏အတွေးများ", a: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/Level%E1%81%82-%E1%80%85%E1%80%AD%E1%80%90%E1%80%BA%E1%81%8F%E1%80%A1%E1%80%90%E1%80%BD%E1%80%B1%E1%80%B8%E1%80%99%E1%80%BB%E1%80%AC%E1%80%B8.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/007-UOWL-Sutadhamma-2009-02-04-SaitEiAhTwayMyar.pdf" },
+            { t: "ဥပုသ်စောင့်ခြင်း အဓိပ္ပာယ်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/008-UOWL-Sutadhamma-2009-04-02-AuPokeSauntChinAhDatePel.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/008-UOWL-Sutadhamma-2009-04-02-AuPokeSauntChinAhDatePel.pdf" },
+            { t: "ခန္ဓသုတ်အနှစ်ချုပ်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/009-UOWL-Sutadhamma-2010-03-18-KhandaThoatAhNyitCholte.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/009-UOWL-Sutadhamma-2010-03-18-KhandaThoatAhNyitCholte.pdf" },
+            { t: "လူတိုင်းကျင့်ရန် သတိပဠာန်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/010-UOWL-Sutadhamma-2009-04-16-LuTainKyinkYanThaTiPaHtan.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/010-UOWL-Sutadhamma-2009-04-16-LuTainKyinkYanThaTiPaHtan.pdf" }
+        ],
+        3: [
+            { t: "သူတော်ကောင်းတို့၏ စိတ်နေသဘောထား", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/011-UOWL-Sutadhamma-2008-11-25-ThuTawKaungToIiSaitNayThaBawHtar.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/011-UOWL-Sutadhamma-2008-11-25-ThuTawKaungToIiSaitNayThaBawHtar.pdf" },
+            { t: "ဘာသာတရားလိုက်နာကျင့်သုံးခြင်း၏ ရည်ရွယ်ချက်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/012-UOWL-Sutadhamma-2010-10-05-BarTharTaYarLiteNarKyintThoneChinAiYeeYwarChat.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/012-UOWL-Sutadhamma-2010-10-05-BarTharTaYarLiteNarKyintThoneChinAiYeeYwarChat.pdf" },
+            { t: "စိတ်၏ထွက်ပေါက်များ", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/013-UOWL-Sutadhamma-2009-12-01-SaitEiHtawkPaukMyar.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/013-UOWL-Sutadhamma-2009-12-01-SaitEiHtawkPaukMyar.pdf" },
+            { t: "ရတနာသုတ် အနှစ်ချုပ်", a: "https://dhammadownload.com/MP3Library/University-Of-Wisdom-Land/Diploma-in-Sutadhamma/014-1-UOWL-Sutadhamma-2010-07-03-YadaNaThoteAhNhitChote-1.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/014-UOWL-Sutadhamma-2010-07-03-YadaNaThoteAhNhitChote.pdf" },
+            { t: "ရှင်အာနန္ဒာ၏ ဝိပဿနာ", a: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/Level%E1%81%83-%E1%80%9B%E1%80%BE%E1%80%84%E1%80%BA%E1%80%A1%E1%80%AC%E1%80%94%E1%80%94%E1%80%B9%E1%80%92%E1%80%AC%E1%81%8F%E1%80%9D%E1%80%AD%E1%80%95%E1%80%BF%E1%80%94%E1%80%AC.mp3", p: "https://www.universitywisdomland.edu.mm/wp-content/uploads/2022/07/015-UOWL-Sutadhamma-2010-04-03-AshinArNandaEiVipassana.pdf" }
+        ]
+    };
+
+    const audioEl = document.getElementById('audio');
+    const cpPlay = document.getElementById('cp-play');
+    const cpFill = document.getElementById('cp-fill');
+    const cpThumb = document.getElementById('cp-thumb');
+    const cpCur = document.getElementById('cp-cur');
+    const cpDur = document.getElementById('cp-dur');
+    const cpVol = document.getElementById('cp-vol');
+    const cpVolIcon = document.getElementById('cp-vol-icon');
+    const cpSeekWrap = document.getElementById('cp-seek-wrap');
+
+    function fmt(s) {
+        if (isNaN(s)) return '0:00';
+        const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+        return `${m}:${sec.toString().padStart(2,'0')}`;
+    }
+
+    audioEl.addEventListener('timeupdate', () => {
+        const pct = audioEl.duration ? (audioEl.currentTime / audioEl.duration) * 100 : 0;
+        cpFill.style.width = pct + '%';
+        cpThumb.style.left = pct + '%';
+        cpCur.textContent = fmt(audioEl.currentTime);
+    });
+    audioEl.addEventListener('loadedmetadata', () => { cpDur.textContent = fmt(audioEl.duration); });
+    audioEl.addEventListener('play', () => { cpPlay.textContent = '⏸'; });
+    audioEl.addEventListener('pause', () => { cpPlay.textContent = '▶'; });
+    audioEl.addEventListener('ended', () => { cpPlay.textContent = '▶'; });
+
+    cpSeekWrap.addEventListener('click', e => {
+        const rect = cpSeekWrap.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        if (audioEl.duration) audioEl.currentTime = pct * audioEl.duration;
+    });
+
+    cpVol.addEventListener('input', () => {
+        audioEl.volume = cpVol.value;
+        cpVolIcon.textContent = cpVol.value == 0 ? '🔇' : cpVol.value < 0.5 ? '🔉' : '🔊';
+    });
+
+    function togglePlay() {
+        audioEl.paused ? audioEl.play().catch(()=>{}) : audioEl.pause();
+    }
+    function skipAudio(sec) { audioEl.currentTime = Math.max(0, audioEl.currentTime + sec); }
+    function toggleMute() {
+        audioEl.muted = !audioEl.muted;
+        cpVolIcon.textContent = audioEl.muted ? '🔇' : '🔊';
+    }
+
+    function load(lvl) {
+        document.getElementById('shop-page').style.display = 'none';
+        document.getElementById('center-page').style.display = 'none';
+        document.getElementById('list').style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.getElementById('b' + lvl);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        const list = document.getElementById('list');
+        list.innerHTML = '';
+
+        lessonData[lvl].forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = 'lesson-card';
+            card.style.animationDelay = `${i * 0.06}s`;
+
+            // Get filename from URL for download
+            const audioFilename = item.a.split('/').pop() || 'audio.mp3';
+            const pdfFilename = item.p.split('/').pop() || 'document.pdf';
+
+            card.innerHTML = `
+                <div class="card-top" onclick="openPlayer(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                    <div class="num-box">${String(i + 1).padStart(2, '0')}</div>
+                    <div class="lesson-text">${item.t}</div>
+                    <span class="card-arrow">›</span>
+                </div>
+                <div class="card-actions">
+                    <a class="dl-btn" href="${item.a}" download="${audioFilename}" title="Audio Download">
+                        <span class="dl-icon">🎵</span> Audio ရယူမည်
+                    </a>
+                    <a class="dl-btn" href="${item.p}" download="${pdfFilename}" target="_blank" title="PDF Download">
+                        <span class="dl-icon">📄</span> PDF ရယူမည်
+                    </a>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    let currentPdfUrl = '';
+    let pdfTimer = null;
+
+    function loadPdf(url) {
+        const pdfFrame = document.getElementById('pdf');
+        const pdfLoading = document.getElementById('pdf-loading');
+        const pdfError = document.getElementById('pdf-error');
+
+        // Reset — hide error, show spinner, hide iframe until ready
+        pdfLoading.classList.remove('hide');
+        pdfLoading.style.display = 'flex';
+        pdfError.style.display = 'none';
+        pdfFrame.style.display = 'none';
+        document.getElementById('pdf-open-btn').href = url;
+
+        // Clear old timers
+        if (pdfTimer) clearTimeout(pdfTimer);
+
+        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+        pdfFrame.src = '';
+        pdfFrame.src = viewerUrl;
+
+        let loaded = false;
+
+        // onload fires when iframe responds (even Google Docs viewer)
+        pdfFrame.onload = () => {
+            if (loaded) return;
+            loaded = true;
+            if (pdfTimer) clearTimeout(pdfTimer);
+            // Small delay so content paints before we reveal
+            setTimeout(() => {
+                pdfLoading.classList.add('hide');
+                pdfError.style.display = 'none';
+                pdfFrame.style.display = 'block';
+                setTimeout(() => { pdfLoading.style.display = 'none'; }, 400);
+            }, 600);
+        };
+
+        // Timeout fallback — 12s
+        pdfTimer = setTimeout(() => {
+            if (loaded) return;
+            pdfLoading.style.display = 'none';
+            pdfFrame.style.display = 'none';
+            pdfError.style.display = 'flex';
+        }, 12000);
+    }
+
+    function reloadPdf() {
+        if (currentPdfUrl) loadPdf(currentPdfUrl);
+    }
+
+    function openPlayer(item) {
+        document.getElementById('player-page').classList.remove('hidden');
+        document.getElementById('p-title').textContent = item.t;
+        audioEl.src = item.a;
+        cpPlay.textContent = '▶';
+        cpFill.style.width = '0%';
+        cpThumb.style.left = '0%';
+        cpCur.textContent = '0:00';
+        cpDur.textContent = '0:00';
+        document.getElementById('dl-audio').href = item.a;
+        document.getElementById('dl-pdf').href = item.p;
+        document.getElementById('player-page').scrollTop = 0;
+        audioEl.play().catch(() => {});
+
+        // PDF
+        currentPdfUrl = item.p;
+        loadPdf(item.p);
+    }
+
+    function closePlayer() {
+        document.getElementById('player-page').classList.add('hidden');
+        audioEl.pause();
+    }
+
+    function toggleTheme() {
+        const isDark = !document.body.hasAttribute('data-theme') || document.body.getAttribute('data-theme') !== 'light';
+        document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+    }
+
+    // ── SHOP ──────────────────────────────────────────────
+    // Telegram ပို့ခြင်းနှင့် Database သိမ်းခြင်းအားလုံးကို Apps Script backend (code.gs) ကနေ
+    // စီမံပါတယ်။ Client ဘက်မှာ Token ထားစရာမလိုတော့ပါ။
+
+    let books = [];
+    let booksLoaded = false;
+
+    async function loadBooks() {
+        try {
+            const res  = await fetch(API_URL + '?action=list_books');
+            const data = await res.json();
+            if (data.ok) {
+                books = data.books;
+                booksLoaded = true;
+                renderBooks();
+                updateSelectionUI();
+            } else {
+                document.getElementById('book-list').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);font-size:0.85rem;">စာအုပ်များ ရယူ၍မရပါ</div>';
+            }
+        } catch (e) {
+            document.getElementById('book-list').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim);font-size:0.85rem;">Internet ချိတ်ဆက်မှု စစ်ဆေးပါ</div>';
+        }
+    }
+
+    let paymentInfo = { kbz: { name: '', number: '' }, wave: { name: '', number: '' } };
+
+    async function loadPayment() {
+        try {
+            const res  = await fetch(API_URL + '?action=list_payment');
+            const data = await res.json();
+            if (data.ok) {
+                paymentInfo = data.payment;
+                document.getElementById('pay-kbz-info').textContent  = paymentInfo.kbz.number  + ' · ' + paymentInfo.kbz.name;
+                document.getElementById('pay-wave-info').textContent = paymentInfo.wave.number + ' · ' + paymentInfo.wave.name;
+            }
+        } catch (e) { /* leave placeholder */ }
+    }
+
+    let selectedBooks = {};
+    let shopFilter = 'all';
+
+    function setShopFilter(f, el) {
+        shopFilter = f;
+        document.querySelectorAll('.shop-chip').forEach(c => {
+            c.classList.remove('active');
+            c.style.background = 'var(--surface)';
+            c.style.color = 'var(--text-dim)';
+        });
+        el.classList.add('active');
+        el.style.background = 'linear-gradient(135deg,var(--gold-dim),var(--gold))';
+        el.style.color = '#0d0a1a';
+        renderBooks();
+    }
+
+    function filteredBooks() {
+        const q = (document.getElementById('sh-search')?.value || '').trim().toLowerCase();
+        return books.filter(b => {
+            if (q && !b.name.toLowerCase().includes(q)) return false;
+            if (shopFilter === 'level' && !b.name.includes('ဒီပလိုမာ')) return false;
+            if (shopFilter === 'dhamma' && b.name.includes('ဒီပလိုမာ')) return false;
+            return true;
+        });
+    }
+
+    function renderBooks() {
+        const el   = document.getElementById('book-list');
+        const list = filteredBooks();
+        if (!list.length) {
+            el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px 10px;color:var(--text-dim);font-size:0.85rem;">စာအုပ်မတွေ့ပါ</div>';
+            return;
+        }
+        el.innerHTML = list.map(b => `
+          <div id="bcard-${b.id}" onclick="toggleBook(${b.id})"
+               style="background:var(--surface);border:1.5px solid var(--border);
+                      border-radius:16px;overflow:hidden;cursor:pointer;
+                      transition:border-color 0.2s,background 0.2s;">
+            <div style="position:relative;aspect-ratio:3/4;background:rgba(0,0,0,0.2);">
+              <img src="${b.img}" alt="${b.name}" loading="lazy"
+                   style="width:100%;height:100%;object-fit:cover;display:block;">
+              <div style="position:absolute;top:6px;left:6px;background:rgba(13,10,26,0.75);
+                          border-radius:8px;padding:2px 7px;font-size:0.68rem;color:var(--gold);
+                          display:flex;align-items:center;gap:3px;">★ 4.9</div>
+              <div id="bcheck-${b.id}" style="position:absolute;top:6px;right:6px;width:26px;height:26px;
+                   border-radius:50%;border:2px solid rgba(255,255,255,0.5);background:rgba(13,10,26,0.55);
+                   display:flex;align-items:center;justify-content:center;font-size:0.8rem;
+                   color:#fff;transition:all 0.2s;"></div>
+            </div>
+            <div style="padding:10px 11px 12px;">
+              <div style="font-size:0.82rem;font-weight:600;color:var(--text);line-height:1.35;
+                          display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${b.name}</div>
+              <div style="font-size:0.78rem;color:var(--gold);margin-top:5px;font-weight:700;">${b.price.toLocaleString()} ကျပ်</div>
+            </div>
+          </div>`).join('');
+        updateSelectionUI();
+    }
+
+    function toggleBook(id) {
+        if (selectedBooks[id]) {
+            delete selectedBooks[id];
+        } else {
+            selectedBooks[id] = books.find(b => b.id === id);
+        }
+        updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+        books.forEach(b => {
+            const card  = document.getElementById('bcard-' + b.id);
+            const check = document.getElementById('bcheck-' + b.id);
+            if (!card || !check) return;
+            if (selectedBooks[b.id]) {
+                card.style.borderColor  = 'var(--gold)';
+                card.style.background   = 'rgba(255,208,74,0.07)';
+                check.style.background  = 'var(--gold)';
+                check.style.borderColor = 'var(--gold)';
+                check.style.color       = '#0d0a1a';
+                check.textContent       = '✓';
+            } else {
+                card.style.borderColor  = 'var(--border)';
+                card.style.background   = 'var(--surface)';
+                check.style.background  = 'rgba(13,10,26,0.55)';
+                check.style.borderColor = 'rgba(255,255,255,0.5)';
+                check.style.color       = '#fff';
+                check.textContent       = '';
+            }
+        });
+        const list  = Object.values(selectedBooks);
+        const total = list.reduce((s, b) => s + b.price, 0);
+
+        document.getElementById('sh-total').textContent = total.toLocaleString() + ' ကျပ်';
+        document.getElementById('sh-selected-books').innerHTML =
+            list.length ? list.map(b => `<span style="display:inline-block;background:rgba(255,208,74,0.12);color:var(--gold);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.8rem;">${b.name}</span>`).join('') : 'အပေါ်မှ စာအုပ်ရွေးပါ →';
+
+        // Floating cart bar
+        const bar = document.getElementById('sh-cart-bar');
+        if (list.length) {
+            bar.style.display = 'flex';
+            document.getElementById('sh-cart-count').textContent = list.length + ' book' + (list.length > 1 ? 's' : '') + ' selected';
+            document.getElementById('sh-cart-total').textContent = total.toLocaleString() + ' ကျပ်';
+        } else {
+            bar.style.display = 'none';
+        }
+    }
+
+    function openShop() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('b-shop').classList.add('active');
+        document.getElementById('list').style.display = 'none';
+        document.getElementById('center-page').style.display = 'none';
+        document.getElementById('shop-page').style.display = 'block';
+        if (!booksLoaded) {
+            document.getElementById('book-list').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim);font-size:0.85rem;">⏳ စာအုပ်များ ဖွင့်နေသည်...</div>';
+            loadBooks();
+            loadPayment();
+        } else {
+            renderBooks();
+            updateSelectionUI();
+        }
+    }
+
+    function closeShop() {
+        document.getElementById('shop-page').style.display = 'none';
+        document.getElementById('center-page').style.display = 'none';
+        document.getElementById('list').style.display = 'block';
+    }
+
+    // ── ORDER MODAL ─────────────────────────────────────────
+    function openOrderModal() {
+        document.getElementById('order-modal-backdrop').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeOrderModal() {
+        document.getElementById('order-modal-backdrop').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // ── PAYMENT ───────────────────────────────────────────
+    let selectedPayment = '';
+    let screenshotFile  = null;
+
+    function selectPayment(type) {
+        selectedPayment = type;
+        ['kbz','wave'].forEach(t => {
+            const card  = document.getElementById('pay-' + t);
+            const check = document.getElementById('pcheck-' + t);
+            if (t === type) {
+                card.style.borderColor   = 'var(--gold)';
+                card.style.background    = 'rgba(255,208,74,0.07)';
+                check.style.background   = 'var(--gold)';
+                check.style.borderColor  = 'var(--gold)';
+                check.textContent        = '✓';
+                check.style.color        = '#0d0a1a';
+                check.style.fontSize     = '0.7rem';
+                check.style.display      = 'flex';
+                check.style.alignItems   = 'center';
+                check.style.justifyContent = 'center';
+            } else {
+                card.style.borderColor   = 'var(--border)';
+                card.style.background    = 'var(--surface2)';
+                check.style.background   = 'transparent';
+                check.style.borderColor  = 'var(--border)';
+                check.textContent        = '';
+            }
+        });
+    }
+
+    function onScreenshot(input) {
+        if (!input.files || !input.files[0]) return;
+        screenshotFile = input.files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('screenshot-img').src = e.target.result;
+            document.getElementById('screenshot-preview').style.display = 'block';
+            document.getElementById('screenshot-text').textContent = '✅ ' + screenshotFile.name;
+            document.getElementById('screenshot-label').style.borderColor = 'var(--gold)';
+        };
+        reader.readAsDataURL(screenshotFile);
+    }
+    // ── END PAYMENT ───────────────────────────────────────
+
+    async function submitOrder() {
+        const name    = document.getElementById('sh-name').value.trim();
+        const phone   = document.getElementById('sh-phone').value.trim();
+        const address = document.getElementById('sh-address').value.trim();
+        const note    = document.getElementById('sh-note').value.trim();
+        const list    = Object.values(selectedBooks);
+        const btn     = document.getElementById('sh-submit-btn');
+
+        if (!name || !phone || !address) {
+            showMsg('⚠️ နာမည်၊ ဖုန်း၊ လိပ်စာ ဖြည့်ပါ', '#e0445a'); return;
+        }
+        if (!list.length) {
+            showMsg('⚠️ စာအုပ်အနည်းဆုံး တစ်အုပ်ရွေးပါ', '#e0445a'); return;
+        }
+        if (!selectedPayment) {
+            showMsg('⚠️ KBZ Pay / Wave Pay ရွေးပါ', '#e0445a'); return;
+        }
+        if (!screenshotFile) {
+            showMsg('⚠️ ငွေလွှဲ Screenshot တင်ပါ', '#e0445a'); return;
+        }
+
+        btn.disabled    = true;
+        btn.textContent = '⏳ တင်နေသည်...';
+
+        try {
+            // Screenshot ကို base64 အဖြစ်ပြောင်းပြီး backend ကို JSON နဲ့ပို့မယ်
+            const screenshotB64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload  = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(screenshotFile);
+            });
+
+            const payload = {
+                action: 'submit_order',
+                name, phone, address, note,
+                books: list.map(b => ({ id: b.id, name: b.name, price: b.price })),
+                payment: selectedPayment,
+                screenshot: screenshotB64,
+                screenshotName: screenshotFile.name
+            };
+
+            const res  = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.ok) {
+                showMsg('✅ Order တင်ပြီးပါပြီ! မကြာမီ ဆက်သွယ်ပေးပါမည်။', 'var(--gold)');
+                // Reset form
+                document.getElementById('sh-name').value    = '';
+                document.getElementById('sh-phone').value   = '';
+                document.getElementById('sh-address').value = '';
+                document.getElementById('sh-note').value    = '';
+                document.getElementById('screenshot-preview').style.display = 'none';
+                document.getElementById('screenshot-text').textContent = 'ဒီနေရာကို နှိပ်ပြီး ပုံတင်ပါ';
+                document.getElementById('screenshot-label').style.borderColor = 'var(--border)';
+                document.getElementById('sh-screenshot').value = '';
+                screenshotFile   = null;
+                selectedPayment  = '';
+                selectedBooks    = {};
+                selectPayment('');
+                updateSelectionUI();
+                renderBooks();
+                setTimeout(closeOrderModal, 1400);
+            } else {
+                showMsg('❌ မပို့နိုင်ဘူး — ' + (data.error || 'Internet စစ်ပါ'), '#e0445a');
+            }
+        } catch(e) {
+            showMsg('❌ Error: ' + e.message, '#e0445a');
+        }
+        btn.disabled    = false;
+        btn.textContent = '📨 Order တင်မည်';
+    }
+
+    function showMsg(text, color) {
+        const el = document.getElementById('sh-msg');
+        el.style.display = 'block';
+        el.style.color   = color;
+        el.textContent   = text;
+    }
+    // ── END SHOP ──────────────────────────────────────────
+
+    // ── EXAM CENTERS ──────────────────────────────────────
+    const examCenters = [
+        {
+            region: 'ရန်ကုန်',
+            icon: 'pin',
+            count: 15,
+            centers: [
+                { name: 'ဇေယျအေးကျောင်းတိုက် (ဓမ္မဗိမာန်ကျောင်း)', address: '(ဈ)ရပ်ကွက်၊ (၆)ကွေ့မှတ်တိုင်၊ သုဓမ္မာလမ်းမကြီး၊ Suzuki Showroom ဘေး၊ မြောက်ဥက္ကလာပမြို့နယ်', map: 'https://maps.app.goo.gl/cFYkkhDiWUzk7LCY8' },
+                { name: 'အ.ထ.က (၁) သန်လျင်', address: 'သီဟိုဠ်လမ်း၊ နာရီစင်အနီး၊ သန်လျင်မြို့နယ်', map: 'https://maps.app.goo.gl/knRtM2nX7ZRbXTeA6' },
+                { name: 'သမိဒ္ဓါဓယသုခိတာရာမ - ဒေါ်ဥာဏစာရီမြန်အောင်သီလရှင်စာသင်တိုက်', address: 'ကျွန်းတောလမ်း၊ မုန့်လက်ဆောင်းကုန်း (တောင်)ရပ်ကွက်၊ စမ်းချောင်းမြို့နယ်', map: 'https://maps.app.goo.gl/qa2TBqFFbqifvWbc7' },
+                { name: 'ကမ္ဘာအေးတိပိဋကဂန္ဓာရုံ ကျောင်းတိုက်', address: 'ဝါယာလက်(၂)လမ်း၊ (၉)ရပ်ကွက်၊ ကျောက်မျက်ရတနာရုံးရှေ့၊ မရမ်းကုန်းမြို့နယ်', map: 'https://maps.app.goo.gl/bBdRbqakPkqh77pa6' },
+                { name: 'အဘိဓမ္မ ရတနာဃရ ဓမ္မဗိမာန်တော်ကြီး', address: 'အမှတ်(၄၉/၅၁)၊ ကြားတောရလမ်းနှင့် ဗဟန်း(၃)လမ်းကြား၊ ကမ္ဘာအေးစေတီလမ်းမကြီး၊ ဗဟန်းမြို့နယ်', map: 'https://maps.app.goo.gl/tSFSg1qJAz1Ze3YY8' },
+                { name: 'ဓမ္မဗျူဟာ (သာသနမာမကအဖွဲ့) လူပုဂ္ဂိုလ်များဆိုင်ရာသင်တန်းကျောင်း', address: 'အမှတ်(၆)၊ ကြားတောရလမ်း၊ ရွှေတိဂုံအရှေ့ဘက်မုခ်၊ ဗဟန်းမြို့နယ်', map: 'https://maps.app.goo.gl/NaHAHqdbwNYuuBQq8' },
+                { name: 'မဟာသာသနာ့ဗိမာန်တော်ကြီး', address: 'အဘိဓမ္မတက္ကသိုလ်-မိုးကောင်းဘုရားလမ်း၊ ရန်ကင်းမြို့နယ်', map: 'https://maps.app.goo.gl/NArdtaumue3Ykra39' },
+                { name: 'အ.ထ.က (၂) လမ်းမတော်', address: 'လှည်းတန်းလမ်းနှင့်အနော်ရထာလမ်းထောင့်၊ လမ်းမတော်မြို့နယ်', map: 'https://maps.app.goo.gl/NBjFkiezq4xtcU3U6' },
+                { name: 'သာသနာ့ဗိမာန်တော်ကြီး (ရွှေပြည်သာ)', address: '(၆)ရပ်ကွက်၊ မြို့ဦးစေတီအတွင်း၊ ရွှေပြည်သာမြို့နယ်', map: 'https://maps.app.goo.gl/Yy3qRqL1iP2V31Zf8' },
+                { name: 'အ.ထ.က (သုဝဏ္ဏ)', address: 'ကျောင်းလမ်းမှတ်တိုင်၊ သံသုမာလမ်းမကြီးပေါ်၊ သင်္ဃန်းကျွန်းမြို့နယ်', map: 'https://maps.app.goo.gl/tM3zXQKx12xiy6kk8' },
+                { name: 'မဟာဗောဓိ ပရိယတ္တိစာသင်တိုက်', address: 'မိုးကောင်းလမ်းမကြီး၊ ရန်ကင်းမြို့နယ်', map: 'https://maps.app.goo.gl/WGhCBxhJ4sxYH9Er9' },
+                { name: 'အမှတ် (၁) အခြေခံပညာအထက်တန်းကျောင်း (ဒဂုံမြို့သစ်တောင်)', address: '(၂၁) ရပ်ကွက်၊ ပြည်ထောင်စုလမ်းမကြီး၊ ဒဂုံမြို့သစ်တောင်ပိုင်းမြို့နယ်', map: 'https://maps.app.goo.gl/jdMAt2KTi3GQ2STu8' },
+                { name: 'ဝါးရုံတောသာသနာ့ပါလစာသင်တိုက်', address: 'လှည်းကူးမြို့၊ ရန်ကုန်တိုင်းဒေသကြီး', map: 'https://maps.app.goo.gl/vtNWQupjsa9JsUrS6' },
+                { name: 'သာသနမကုဋအတုလဗိမာန်တော်ကြီး', address: 'အမှတ် (၆) ရပ်ကွက်၊ အောင်မြေသာယာဘုရားဝင်း၊ လှိုင်သာယာမြို့နယ်', map: 'https://maps.app.goo.gl/2pUbBpy72QVbzdJS7' },
+                { name: 'အ.ထ.က (၁) အင်းစိန်', address: 'သန်းမြင့်ကျောင်းလမ်းနှင့် ဗဟိုလမ်းထောင့်၊ နံ့သာကုန်းရပ်ကွက်၊ အင်းစိန်မြို့နယ်', map: 'https://maps.app.goo.gl/YyHumsrq26B68iFTA' },
+            ]
+        },
+        { region: 'မန္တလေး', icon: 'pin', count: 6, centers: [] },
+        { region: 'နေပြည်တော်', icon: 'pin', count: 1, centers: [] },
+        { region: 'ပဲခူး', icon: 'pin', count: 5, centers: [] },
+        { region: 'မွန်', icon: 'pin', count: 4, centers: [] },
+        { region: 'စစ်ကိုင်း', icon: 'pin', count: 2, centers: [] },
+        { region: 'မကွေး', icon: 'pin', count: 2, centers: [] },
+        { region: 'ဧရာဝတီ', icon: 'pin', count: 6, centers: [] },
+        { region: 'တနသ်ာရီ', icon: 'pin', count: 2, centers: [] },
+        { region: 'ကချင်', icon: 'pin', count: 2, centers: [] },
+        { region: 'ကရင်', icon: 'pin', count: 1, centers: [] },
+        { region: 'ရှမ်း', icon: 'pin', count: 4, centers: [] },
+    ];
+
+    const openRegions = {};
+
+    function renderRegions() {
+        const el = document.getElementById('region-list');
+        el.innerHTML = examCenters.map((r, ri) => {
+            const hasData = r.centers.length > 0;
+            const isOpen = openRegions[ri];
+            return `
+            <div style="background:var(--surface);border:1px solid ${isOpen ? 'rgba(255,208,74,0.55)' : 'var(--border)'};border-radius:18px;overflow:hidden;transition:border-color 0.3s;">
+              <!-- Region header -->
+              <div onclick="toggleRegion(${ri})" style="display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none;">
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1e1a3a,#0d0a1a);border:1px solid rgba(255,208,74,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width=\"22\" height=\"28\" viewBox=\"0 0 24 30\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 0C5.373 0 0 5.373 0 12c0 7.5 12 18 12 18S24 19.5 24 12C24 5.373 18.627 0 12 0z\" fill=\"#EA4335\"/><circle cx=\"12\" cy=\"12\" r=\"4.5\" fill=\"white\"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;color:var(--text);font-size:0.97rem;">${r.region}စာဖြေဌာန</div>
+                  <div style="font-size:0.78rem;color:var(--gold);margin-top:2px;">${r.count} ဌာန${!hasData ? ' · မကြာမီထည့်မည်' : ''}</div>
+                </div>
+                <span style="color:${isOpen ? 'var(--gold)' : 'var(--text-dim)'};font-size:1.1rem;transition:transform 0.3s;display:inline-block;transform:${isOpen ? 'rotate(90deg)' : 'rotate(0deg)'};">›</span>
+              </div>
+              <!-- Dropdown -->
+              ${isOpen ? `<div style="border-top:1px solid var(--border);padding:10px 14px 14px;">
+                ${hasData ? r.centers.map((c, ci) => `
+                  <a href="${c.map}" target="_blank" rel="noopener" style="display:flex;align-items:flex-start;gap:12px;padding:12px 10px;border-radius:12px;text-decoration:none;transition:background 0.2s;margin-bottom:${ci < r.centers.length-1 ? '6px' : '0'};"
+                     onmouseover="this.style.background='rgba(255,208,74,0.07)'" onmouseout="this.style.background='transparent'">
+                    <div style="min-width:28px;height:28px;border-radius:8px;background:rgba(255,208,74,0.1);border:1px solid rgba(255,208,74,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold);font-size:0.8rem;flex-shrink:0;margin-top:1px;">${ci+1}</div>
+                    <div style="flex:1;">
+                      <div style="font-size:0.88rem;font-weight:600;color:var(--text);line-height:1.4;">${c.name}</div>
+                      <div style="font-size:0.77rem;color:var(--text-dim);margin-top:3px;line-height:1.4;">📌 ${c.address}</div>
+                      <div style="font-size:0.75rem;color:var(--gold);margin-top:5px;display:flex;align-items:center;gap:4px;">🗺️ Google Map တွင်ကြည့်မည်</div>
+                    </div>
+                    <span style="color:var(--gold);font-size:0.9rem;flex-shrink:0;margin-top:3px;">↗</span>
+                  </a>
+                `).join('') : `
+                <div style="text-align:center;padding:20px 10px;color:var(--text-dim);font-size:0.85rem;">
+                  <div style="font-size:1.5rem;margin-bottom:8px;">⏳</div>
+                  မကြာမီ လိပ်စာများ ထည့်သွင်းပေးပါမည်
+                </div>`}
+              </div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function toggleRegion(ri) {
+        openRegions[ri] = !openRegions[ri];
+        renderRegions();
+    }
+
+    function openCenter() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('b-center').classList.add('active');
+        document.getElementById('list').style.display = 'none';
+        document.getElementById('shop-page').style.display = 'none';
+        document.getElementById('center-page').style.display = 'block';
+        renderRegions();
+    }
+    // ── END EXAM CENTERS ──────────────────────────────────
+
+    window.onload = () => {
+        load(1);
+
+        // Splash — fade out then fully remove
+        const splash = document.getElementById('splash');
+        setTimeout(() => {
+            splash.classList.add('hide-splash');
+            setTimeout(() => { splash.style.display = 'none'; }, 850);
+        }, 2800);
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .catch(err => console.log('SW error:', err));
+        }
+    };
+</script>
+</body>
+</html>
