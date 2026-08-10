@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MKZ830L91T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MKZ830L91T');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0f0f16">
+<meta name="supported-color-schemes" content="dark light">
+<meta name="darkreader-lock">
+<meta http-equiv="x-color-scheme" content="dark light">
+<title>Dr.X Hub — Online Book Library</title>
+<meta name="description" content="Dr.X Hub — Video နှင့် Ebook များကို အွန်လိုင်းမှာ တိုက်ရိုက်ကြည့်ရှု၊ ဖတ်ရှုနိုင်သော Platform။">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://YOUR-DOMAIN.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dr.X Hub — Online Book Library">
+<meta property="og:description" content="Video နှင့် Ebook များကို အွန်လိုင်းမှာ တိုက်ရိုက်ကြည့်ရှု၊ ဖတ်ရှုနိုင်သော Platform။">
+<meta property="og:url" content="https://YOUR-DOMAIN.com/">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dr.X Hub">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  html{ color-scheme: dark; }
+  html[data-theme="light"]{ color-scheme: light; }
+  html, body, *{
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+  }
+  html, body{
+    background-color: var(--bg) !important;
+  }
+  :root{
+    color-scheme: dark;
+    --primary:#7c6cf0;
+    --primary-dark:#6a58e6;
+    --primary-light:rgba(124,108,240,0.16);
+    --gold:#f5a623;
+    --ink:#f1f1f8;
+    --muted:#9a9dc4;
+    --muted-light:#6c6f92;
+    --bg:#0f0f16;
+    --card:#1a1a24;
+    --border:#2b2b3a;
+    --green:#34d399;
+    --green-bg:rgba(52,211,153,0.14);
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans Myanmar', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:78px; /* space for bottom nav */
+  }
+  input, textarea, select, button{ color-scheme: inherit; }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  ::selection{background:var(--primary); color:#fff;}
+
+  .page{ display:none; max-width:640px; margin:0 auto; }
+  .page.active{ display:block; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50; background:var(--bg);
+  }
+  .header-inner{
+    max-width:640px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 20px 10px;
+  }
+  .brand{ font-size:22px; font-weight:800; letter-spacing:-0.01em; }
+  .brand span{ color:var(--primary); }
+  .header-icons{ display:flex; align-items:center; gap:14px; }
+  .icon-circle{
+    width:38px; height:38px; border-radius:50%; background:var(--card); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer;
+    position:relative; color:var(--ink);
+  }
+  .icon-circle .dot-badge{
+    position:absolute; top:6px; right:7px; width:8px; height:8px; border-radius:50%; background:#e14f4f;
+    border:1.5px solid var(--bg); display:none;
+  }
+  .icon-circle .dot-badge.show{ display:block; }
+
+  /* ---------- HERO / WELCOME BANNER ---------- */
+  .hero{
+    margin:6px 20px 24px; padding:28px 24px; border-radius:var(--radius-lg);
+    background:linear-gradient(135deg, #1e1a3a, #17142c);
+    position:relative; overflow:hidden;
+  }
+  .hero-deco{
+    position:absolute; top:-30px; right:-30px; width:140px; height:140px; border-radius:50%;
+    background:rgba(124,108,240,0.14);
+  }
+  .hero-deco.b{ bottom:-50px; right:30px; width:100px; height:100px; background:rgba(124,108,240,0.10); top:auto; }
+
+  /* ---------- IMAGE SLIDER (Banner) ---------- */
+  .banner-slider{
+    margin:6px 20px 22px; position:relative; border-radius:var(--radius-lg);
+    overflow:hidden; aspect-ratio:16/9; background:linear-gradient(135deg,#1e1a3a,#17142c);
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  }
+  .banner-slider-track{
+    display:flex; height:100%; transition:transform .5s cubic-bezier(.4,0,.2,1);
+  }
+  .banner-slider-track img{
+    width:100%; height:100%; object-fit:cover; flex-shrink:0; cursor:pointer;
+  }
+  .banner-slider-dots{
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    display:flex; gap:6px; z-index:2;
+  }
+  .banner-slider-dots .dot{
+    width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.4);
+    transition:all .25s; cursor:pointer;
+  }
+  .banner-slider-dots .dot.active{ width:18px; border-radius:4px; background:#fff; }
+  .hero h1{ font-size:23px; font-weight:800; margin:0 0 8px; line-height:1.3; position:relative; }
+  .hero h1 .accent{ color:var(--primary); }
+  .hero p{ color:var(--muted); font-size:13.5px; line-height:1.7; margin:0 0 6px; max-width:76%; position:relative; }
+  .hero .sub{ font-size:12.5px; color:var(--muted-light); margin-bottom:18px; }
+  .hero-actions{ display:flex; gap:10px; flex-wrap:wrap; position:relative; }
+  .btn{
+    display:inline-flex; align-items:center; gap:7px; justify-content:center;
+    border:none; padding:12px 20px; border-radius:999px;
+    font-family:inherit; font-weight:700; font-size:13.5px; cursor:pointer; text-decoration:none;
+    transition: transform .15s, box-shadow .15s, background .15s;
+  }
+  .btn-primary{ background:var(--primary); color:#fff; box-shadow:0 8px 18px rgba(124,108,240,0.28); }
+  .btn-primary:hover{ transform:translateY(-1px); background:var(--primary-dark); }
+  .btn-white{ background:var(--card); color:var(--ink); border:1px solid rgba(255,255,255,0.10); }
+  .btn-white:hover{ transform:translateY(-1px); }
+  .btn-outline{ background:transparent; border:1.5px solid var(--border); color:var(--ink); }
+  .btn.full{ width:100%; }
+  .btn.small{ padding:9px 16px; font-size:12.5px; }
+  .btn:disabled{ opacity:0.4; cursor:not-allowed; transform:none; }
+
+  /* ---------- SEARCH ---------- */
+  .search-wrap{ margin:0 20px 22px; position:relative; }
+  .search-wrap input{
+    width:100%; background:var(--card); border:1px solid var(--border); border-radius:999px;
+    padding:13px 18px 13px 42px; font-size:14px; outline:none; color:var(--ink); font-family:inherit;
+  }
+  .search-wrap input:focus{ border-color:var(--primary); }
+  .search-wrap .icon{ position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--muted-light); font-size:15px; }
+  .filter-row{ display:flex; gap:8px; margin:0 20px 22px; overflow-x:auto; padding-bottom:2px; }
+  .filter-row::-webkit-scrollbar{ display:none; }
+  .filter-chip{
+    flex-shrink:0; background:var(--card); border:1px solid var(--border); color:var(--muted);
+    padding:9px 18px; border-radius:999px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s;
+  }
+  .filter-chip.active{ background:var(--primary); border-color:var(--primary); color:#fff; }
+
+  /* ---------- SECTIONS ---------- */
+  .section{ margin-bottom:28px; }
+  .section-head{ display:flex; align-items:center; justify-content:space-between; padding:0 20px; margin-bottom:14px; }
+  .section-head h2{ font-size:17px; font-weight:800; margin:0; display:flex; align-items:center; gap:7px; }
+  .section-head .view-all{ font-size:13px; color:var(--primary); font-weight:700; display:flex; align-items:center; gap:2px; cursor:pointer; }
+
+  .rail{
+    display:flex; gap:14px; overflow-x:auto; padding:0 20px 6px; scroll-snap-type:x proximity;
+  }
+  .rail::-webkit-scrollbar{ display:none; }
+  .book-card{
+    flex-shrink:0; width:135px; cursor:pointer; scroll-snap-align:start;
+  }
+  .book-cover{
+    width:135px; height:180px; border-radius:var(--radius-md); position:relative; overflow:hidden;
+    background:linear-gradient(160deg, #3a3a4a, #26262f);
+    display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.35);
+  }
+  .book-cover img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .book-cover .fallback-title{
+    color:#fff; font-weight:700; font-size:13px; text-align:center; padding:14px; position:relative; z-index:1;
+    text-shadow:0 2px 6px rgba(0,0,0,0.3);
+  }
+  .tag-pill{
+    position:absolute; top:9px; left:9px; z-index:2; font-size:9.5px; font-weight:800; letter-spacing:0.04em;
+    text-transform:uppercase; padding:3px 9px; border-radius:999px;
+  }
+  .tag-pill.free{ background:var(--green-bg); color:var(--green); }
+  .tag-pill.premium{ background:rgba(24,26,42,0.55); color:#ffd27a; backdrop-filter:blur(2px); }
+  .lock-icon{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(10,10,20,0.28); z-index:1;
+  }
+  .lock-icon span{
+    width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.9);
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .video-play-badge{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:1; pointer-events:none;
+  }
+  .video-play-badge::before{
+    content:''; position:absolute; inset:0; background:rgba(10,10,20,0.15);
+  }
+  .video-play-badge{
+    color:#fff; font-size:15px; text-shadow:0 2px 8px rgba(0,0,0,0.5);
+  }
+  .video-play-badge{
+    width:100%; height:100%;
+  }
+  .video-play-badge{
+    display:flex;
+  }
+  .video-play-badge::after{
+    content:'▶'; position:relative; z-index:1; width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,0.92); color:var(--primary); display:flex; align-items:center;
+    justify-content:center; font-size:14px; padding-left:3px; box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  }
+  .video-player-wrap{
+    width:100%; aspect-ratio:16/9; background:#000; position:relative;
+  }
+  .video-player-wrap video,
+  .video-player-wrap iframe{
+    width:100%; height:100%; display:block; background:#000; border:none;
+  }
+  .book-title{ font-size:13.5px; font-weight:700; margin:0 0 3px; line-height:1.35; color:var(--ink); }
+  .book-meta{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--muted); }
+  .book-meta .rating{ display:flex; align-items:center; gap:3px; color:var(--gold); font-weight:700; }
+
+  /* ---------- VIDEO GRID (2-column) ---------- */
+  .video-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:20px 12px; padding:0 20px;
+  }
+  .video-card{ cursor:pointer; }
+  .video-thumb{
+    position:relative; width:100%; aspect-ratio:4/3; border-radius:10px; overflow:hidden;
+    background:linear-gradient(160deg,#3a3a4a,#26262f); margin-bottom:8px;
+  }
+  .video-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .video-badge-hd{
+    position:absolute; top:7px; right:7px; z-index:2; background:rgba(10,10,20,0.65); color:#fff;
+    font-size:10px; font-weight:800; letter-spacing:0.03em; padding:2px 7px; border-radius:4px;
+  }
+  .video-card-title{ font-size:14px; font-weight:700; line-height:1.35; color:var(--ink); margin:0; }
+  .video-skel{
+    aspect-ratio:4/3; border-radius:10px; background:linear-gradient(90deg,var(--skel-a,#e8e8ee),var(--skel-b,#f4f4f8),var(--skel-a,#e8e8ee));
+    background-size:200% 100%; animation:skel-shine 1.3s ease-in-out infinite;
+  }
+  @keyframes skel-shine{ 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
+
+  /* full grid for search results */
+  .full-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(135px,1fr)); gap:16px 14px; padding:0 20px;
+  }
+
+  .empty{ text-align:center; color:var(--muted); padding:50px 20px; font-size:13.5px; }
+
+  /* ---------- BOTTOM NAV ---------- */
+  .bottom-nav{
+    position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border);
+    display:flex; z-index:60; padding:8px 0 max(8px, env(safe-area-inset-bottom));
+  }
+  .nav-item{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 0;
+    cursor:pointer; color:var(--muted-light); font-size:11px; font-weight:600;
+  }
+  .nav-item .nav-icon{ font-size:20px; line-height:1; }
+  .nav-item.active{ color:var(--primary); }
+
+  /* ---------- PWA INSTALL POPUP ---------- */
+  .install-popup{
+    position:fixed; left:12px; right:12px; bottom:calc(64px + env(safe-area-inset-bottom) + 10px);
+    z-index:70; background:var(--card); border:1px solid var(--border); border-radius:16px;
+    box-shadow:0 12px 32px rgba(0,0,0,0.25); padding:14px; display:none;
+    align-items:center; gap:12px; transform:translateY(120%); opacity:0;
+    transition:transform .35s ease, opacity .35s ease;
+  }
+  .install-popup.show{ display:flex; transform:translateY(0); opacity:1; }
+  .install-popup .install-icon{
+    width:46px; height:46px; border-radius:12px; flex-shrink:0;
+    background:linear-gradient(135deg, var(--primary), #8b7cf6);
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+  }
+  .install-popup .install-text{ flex:1; min-width:0; }
+  .install-popup .install-text strong{ display:block; font-size:13.5px; color:var(--ink); }
+  .install-popup .install-text span{ display:block; font-size:11.5px; color:var(--muted); margin-top:1px; }
+  .install-popup .install-btn{
+    background:var(--primary); color:#fff; border:none; border-radius:10px;
+    padding:8px 14px; font-size:12.5px; font-weight:700; cursor:pointer; flex-shrink:0;
+  }
+  .install-popup .install-close{
+    background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer;
+    padding:4px; flex-shrink:0; line-height:1;
+  }
+
+  /* ---------- PROFILE PAGE ---------- */
+  .profile-header{
+    padding:26px 20px 22px; text-align:center;
+  }
+  .profile-avatar{
+    width:76px; height:76px; border-radius:50%; margin:0 auto 14px;
+    background:linear-gradient(135deg, var(--primary), #8b7cf6);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-size:28px; font-weight:800;
+    box-shadow:0 10px 24px rgba(124,108,240,0.3);
+  }
+  .profile-name{ font-size:19px; font-weight:800; margin:0 0 4px; }
+  .profile-sub{ font-size:13px; color:var(--muted); }
+  .status-chip{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:6px 14px; border-radius:999px;
+    font-size:12px; font-weight:700;
+  }
+  .status-chip.approved{ background:var(--green-bg); color:var(--green); }
+  .status-chip.pending{ background:rgba(245,166,35,0.15); color:#f5b944; }
+  .status-chip.guest{ background:var(--primary-light); color:var(--primary); }
+  .status-chip.rejected{ background:rgba(225,79,79,0.15); color:#ff8080; }
+
+  .profile-section{ margin:0 20px 20px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; }
+  .profile-section h3{ font-size:14.5px; font-weight:800; margin:0 0 14px; }
+  .profile-section p.desc-text{ font-size:13px; color:var(--muted); line-height:1.75; margin:0 0 16px; }
+
+  .id-highlight{
+    background:linear-gradient(135deg, rgba(124,108,240,0.16), rgba(124,108,240,0.05));
+    border:1.5px dashed rgba(124,108,240,0.35); border-radius:var(--radius-sm); padding:16px; text-align:center; margin-bottom:14px;
+  }
+  .id-highlight .label{ font-size:11.5px; color:var(--muted); margin-bottom:8px; }
+  .id-highlight .value{ font-family:monospace; font-size:19px; font-weight:800; color:var(--ink); letter-spacing:0.03em; }
+
+  .auth-tabs{ display:flex; gap:6px; background:var(--bg); border-radius:var(--radius-sm); padding:4px; margin-bottom:20px; }
+  .auth-tab{
+    flex:1; text-align:center; padding:9px; border-radius:8px; font-size:13px; font-weight:700;
+    cursor:pointer; color:var(--muted); transition: all .15s;
+  }
+  .auth-tab.active{ background:var(--primary); color:#fff; }
+  .form-field{ text-align:left; margin-bottom:14px; }
+  .form-field label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; font-weight:600; }
+  .form-field input{
+    width:100%; background:var(--bg); border:1.5px solid var(--border); color:var(--ink);
+    padding:12px 14px; border-radius:var(--radius-sm); font-size:14px; outline:none; font-family:inherit;
+  }
+  .form-field input:focus{ border-color:var(--primary); background:var(--card); }
+  .form-field input[readonly]{ opacity:0.7; cursor:not-allowed; }
+  .form-error{ color:#ff8080; font-size:12.5px; margin:-4px 0 12px; min-height:14px; }
+
+  /* ---------- PREMIUM ORDER FORM ---------- */
+  .price-highlight{
+    background:linear-gradient(135deg, rgba(124,108,240,0.16), rgba(124,108,240,0.05));
+    border:1.5px dashed rgba(124,108,240,0.35); border-radius:var(--radius-sm);
+    padding:16px; text-align:center; margin-bottom:16px;
+  }
+  .price-highlight .label{ font-size:12px; color:var(--muted); margin-bottom:4px; }
+  .price-highlight .value{ font-size:24px; font-weight:800; color:var(--primary); }
+  .pay-method-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .pay-method-card{
+    border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:14px 10px;
+    text-align:center; cursor:pointer; transition:all .15s; background:var(--card);
+  }
+  .pay-method-card.selected{ border-color:var(--primary); background:var(--primary-light); }
+  .pay-method-card .pm-icon{ font-size:26px; margin-bottom:6px; }
+  .pay-method-card .pm-icon img{ width:36px; height:36px; object-fit:contain; border-radius:8px; }
+  .pay-method-card .pm-name{ font-size:13px; font-weight:700; }
+  .pay-detail-box{
+    display:none; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:14px; margin-bottom:16px; font-size:13px;
+  }
+  .pay-detail-box.show{ display:block; }
+  .pay-detail-box .row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; }
+  .pay-detail-box .row + .row{ border-top:1px dashed var(--border); }
+  .pay-detail-box .k{ color:var(--muted); }
+  .pay-detail-box .v{ font-weight:700; }
+  .upload-box{
+    border:1.5px dashed var(--border); border-radius:var(--radius-sm); padding:20px;
+    text-align:center; cursor:pointer; margin-bottom:16px; position:relative; overflow:hidden;
+  }
+  .upload-box.has-image{ padding:0; border-style:solid; }
+  .upload-box img{ width:100%; display:block; max-height:220px; object-fit:contain; background:var(--bg); }
+  .upload-box input[type=file]{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .upload-box .hint{ font-size:12.5px; color:var(--muted); margin-top:6px; }
+
+  /* ---------- BOOK READ MODAL ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(10,10,20,0.55); backdrop-filter: blur(3px);
+    display:none; align-items:flex-end; justify-content:center; z-index:100;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    background:var(--card); color:var(--ink); border-radius:24px 24px 0 0; max-width:640px; width:100%;
+    max-height:92vh; overflow-y:auto;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    animation: rise .25s ease;
+  }
+  @media (min-width:660px){
+    .overlay{ align-items:center; padding:30px 16px; }
+    .modal{ border-radius:20px; max-height:88vh; }
+  }
+  @keyframes rise{ from{ opacity:0; transform:translateY(24px);} to{opacity:1; transform:translateY(0);} }
+  .modal-head{
+    padding:22px 22px 16px; border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+    position:sticky; top:0; background:var(--card); z-index:2; border-radius:24px 24px 0 0;
+  }
+  .modal-head h2{ margin:0 0 5px; font-size:20px; font-weight:800; }
+  .modal-head .meta{ font-size:12.5px; color:var(--muted); }
+  .close-btn{
+    background:var(--bg); border:none; width:32px; height:32px; border-radius:50%;
+    cursor:pointer; font-size:15px; color:var(--ink); flex-shrink:0;
+  }
+  .modal-body{ padding:20px 22px 34px; }
+  .modal-body .desc{ font-size:14px; line-height:1.8; color:var(--muted); margin-bottom:20px; }
+  .reading{ font-size:16px; line-height:2.05; white-space:pre-wrap; }
+
+  .lock-box{
+    text-align:center; padding:36px 20px; border:1.5px dashed rgba(124,108,240,0.3);
+    border-radius:var(--radius-md); background:var(--primary-light);
+  }
+  .lock-box .icon{ font-size:32px; margin-bottom:14px; }
+  .lock-box h3{ margin:0 0 8px; font-size:17px; font-weight:800; }
+  .lock-box p{ color:var(--muted); font-size:13.5px; margin:0 0 20px; line-height:1.7; }
+
+  .status-line{ font-size:12.5px; margin-top:14px; color:var(--muted); }
+  .status-line b{ color:var(--ink); }
+
+  .toc-list{ display:flex; flex-direction:column; gap:2px; }
+  .toc-item{
+    display:flex; align-items:center; gap:12px; padding:14px 10px; border-radius:var(--radius-sm); cursor:pointer;
+    transition: background .15s;
+  }
+  .toc-item:hover{ background:var(--bg); }
+  .toc-num{ font-weight:800; font-size:13px; color:var(--primary); min-width:24px; }
+  .toc-title{ flex:1; font-size:14.5px; color:var(--ink); }
+  .toc-arrow{ color:var(--muted-light); font-size:18px; }
+  .back-link{
+    background:none; border:none; padding:0; color:var(--primary); font-size:13px; font-weight:700;
+    cursor:pointer; font-family:inherit;
+  }
+  .chapter-nav{ display:flex; gap:10px; margin-top:28px; padding-top:20px; border-top:1px solid var(--border); }
+  .chapter-nav .btn{ flex:1; }
+
+  .toast{
+    position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:#242432; color:#fff; padding:12px 22px; border-radius:999px;
+    font-size:13px; font-weight:600; opacity:0; pointer-events:none; transition:all .3s;
+    z-index:200; box-shadow:0 10px 30px rgba(0,0,0,0.45);
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  .skel{ animation: pulse 1.4s infinite ease-in-out; background:var(--border); border-radius:var(--radius-md); width:135px; height:180px; flex-shrink:0; }
+  @keyframes pulse{ 0%,100%{opacity:.5;} 50%{opacity:1;} }
+
+  /* ---------- SPINNERS / LOADING ---------- */
+  .spinner{
+    width:34px; height:34px; border-radius:50%;
+    border:3px solid rgba(124,108,240,0.15); border-top-color:var(--primary);
+    animation: spin .7s linear infinite; margin:0 auto;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .spin-small{
+    display:inline-block; width:15px; height:15px; border-radius:50%;
+    border:2px solid rgba(255,255,255,0.4); border-top-color:#fff;
+    animation: spin .6s linear infinite; vertical-align:middle; margin-right:7px;
+  }
+  .modal-loading{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:70px 20px; gap:14px;
+  }
+  .modal-loading p{ color:var(--muted); font-size:13px; margin:0; }
+
+  .page-loading-bar{
+    position:fixed; top:0; left:0; right:0; height:3px; z-index:200;
+    background:rgba(124,108,240,0.12); overflow:hidden; display:none;
+  }
+  .page-loading-bar.show{ display:block; }
+  .page-loading-bar .bar{
+    position:absolute; top:0; left:0; height:100%; width:40%; background:var(--primary);
+    border-radius:0 3px 3px 0; animation: loadbar 1.1s ease-in-out infinite;
+  }
+  @keyframes loadbar{
+    0%{ left:-40%; }
+    100%{ left:100%; }
+  }
+
+  .rail-loading-text, .grid-loading-text{
+    display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; padding:16px 4px;
+  }
+
+  /* ---------- REALTIME NOTIFICATION BANNER ---------- */
+  .notif-banner{
+    position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-120%);
+    max-width:400px; width:calc(100% - 32px); background:var(--card); border-radius:16px;
+    box-shadow:0 14px 34px rgba(0,0,0,0.45); border:1px solid var(--border);
+    padding:14px 16px; display:flex; gap:12px; align-items:flex-start; cursor:pointer;
+    z-index:150; transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .notif-banner.show{ transform:translateX(-50%) translateY(0); }
+  .notif-banner-icon{
+    width:38px; height:38px; border-radius:50%; background:var(--primary-light); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:17px;
+  }
+  .notif-banner-title{ font-size:13.5px; font-weight:800; margin:0 0 2px; }
+  .notif-banner-msg{ font-size:12.5px; color:var(--muted); margin:0; line-height:1.5; }
+
+  /* ---------- NOTIFICATION LIST ---------- */
+  .notif-item{ padding:14px 4px; border-bottom:1px solid var(--border); }
+  .notif-item:last-child{ border-bottom:none; }
+  .notif-item-title{ font-size:14px; font-weight:800; margin:0 0 4px; color:var(--ink); }
+  .notif-item-msg{ font-size:13px; color:var(--muted); margin:0 0 6px; line-height:1.6; }
+  .notif-item-time{ font-size:11px; color:var(--muted-light); }
+
+  /* ---------- 2D LIVE PAGE (scoped) ---------- */
+  #page-twodlive{ background:#f2f2f5; min-height:100vh; margin-left:-1px; margin-right:-1px; padding-bottom:74px; }
+  #twodLiveRoot{ font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:#1a1a1a; }
+  #twodLiveRoot .live-close-row{ display:flex; justify-content:flex-end; padding:14px 16px 0; }
+  #twodLiveRoot .live-close-btn{
+    width:34px; height:34px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.12);
+    display:flex; align-items:center; justify-content:center; font-size:16px; color:#555; cursor:pointer;
+  }
+  #twodLiveRoot .live-main{
+    background:#fff; margin:6px 16px 16px; border-radius:16px; padding:26px 20px 20px; text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  }
+  #twodLiveRoot .live-number-big{
+    font-size:6.4em; font-weight:800; color:#3ba24c; text-shadow:1px 2px 0 rgba(0,0,0,0.08);
+    line-height:1; margin:6px 0 4px; transition:all .3s ease; font-family:'Segoe UI', Arial, sans-serif;
+  }
+  #twodLiveRoot .live-number-big.heartbeat{ animation: twod-heartbeat 1s ease-in-out; }
+  @keyframes twod-heartbeat{
+    0%{ transform:scale(1); }
+    15%{ transform:scale(1.15); }
+    30%{ transform:scale(0.95); }
+    45%{ transform:scale(1.1); }
+    60%{ transform:scale(0.98); }
+    75%{ transform:scale(1.05); }
+    100%{ transform:scale(1); }
+  }
+  #twodLiveRoot .live-number-big.glow{ }
+  #twodLiveRoot .live-status{
+    display:flex; align-items:center; justify-content:center; gap:6px; margin:6px 0 0;
+    font-size:0.85em; color:#8a8a8a; font-style:italic;
+  }
+  #twodLiveRoot .live-status .dot{ display:none; }
+  #twodLiveRoot .live-status .refresh-ic{ font-size:1em; }
+  #twodLiveRoot .set-value-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  #twodLiveRoot .sv-box{
+    background:#f5f6fa; border:1px solid #ececef; border-radius:12px; padding:12px; text-align:center;
+  }
+  #twodLiveRoot .sv-box .label{ font-size:0.8em; color:#8a8a8a; font-weight:700; margin-bottom:5px; letter-spacing:0.03em; }
+  #twodLiveRoot .sv-box .value{ font-size:1.25em; font-weight:800; color:#1a237e; }
+  #twodLiveRoot .today-results{ display:flex; flex-direction:column; gap:12px; padding:0 16px; }
+  #twodLiveRoot .time-card{
+    background:#ef4b3d; border-radius:14px; padding:16px 18px; color:#fff;
+    box-shadow:0 2px 8px rgba(239,75,61,0.25);
+  }
+  #twodLiveRoot .time-card .time-label{
+    font-size:1.35em; font-weight:700; text-align:center; margin-bottom:10px; padding-bottom:10px;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+  }
+  #twodLiveRoot .time-card .tc-row{ display:flex; align-items:center; }
+  #twodLiveRoot .time-card .tc-col{ flex:1; text-align:center; }
+  #twodLiveRoot .time-card .tc-col .tc-label{ font-size:0.8em; color:rgba(255,255,255,0.85); margin-bottom:6px; }
+  #twodLiveRoot .time-card .tc-col .tc-value{ font-size:1.15em; font-weight:700; }
+  #twodLiveRoot .time-card .tc-col.tc-2d .tc-value{ color:#ffe14d; font-size:1.3em; }
+  #twodLiveRoot .twod-number{ display:none; }
+  #twodLiveRoot .details{ display:none; }
+  #twodLiveRoot .countdown-section{ text-align:center; padding:16px 20px 4px; }
+  #twodLiveRoot .countdown-label{ font-size:0.85em; color:#8a8a8a; margin-bottom:8px; }
+  #twodLiveRoot .countdown-time{
+    font-size:1.7em; font-weight:bold; color:#1a237e; background:#fff;
+    display:inline-block; padding:8px 26px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  #twodLiveRoot .twod-tab-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:70;
+    display:flex; justify-content:center; align-items:center; gap:0;
+    background:#fff; padding:8px 6px max(8px, env(safe-area-inset-bottom));
+    box-shadow:0 -2px 10px rgba(0,0,0,0.08); border-top:1px solid #ececef;
+  }
+  #twodLiveRoot .twod-tab-item{
+    flex:1; max-width:150px; text-align:center; cursor:pointer; padding:8px 6px; border-radius:12px;
+    transition:all .3s ease; background:transparent;
+  }
+  #twodLiveRoot .twod-tab-item.active{ background:#eef1fb; }
+  #twodLiveRoot .twod-tab-item .tab-icon{ font-size:1.3em; margin-bottom:2px; }
+  #twodLiveRoot .twod-tab-item .tab-label{ font-size:0.78em; color:#8a8a8a; font-weight:500; }
+  #twodLiveRoot .twod-tab-item.active .tab-label{ color:#1a237e; font-weight:bold; }
+  #twodLiveRoot .twod-history-section{ padding:10px 20px 20px; display:none; }
+  #twodLiveRoot .twod-history-section.active{ display:block; }
+  #twodLiveRoot .twod-live-content{ display:block; }
+  #twodLiveRoot .twod-live-content.hidden{ display:none; }
+  #twodLiveRoot .twod-history-table{ width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; }
+  #twodLiveRoot .twod-history-table th{ background:#1565c0; color:#fff; padding:12px 10px; font-size:0.9em; }
+  #twodLiveRoot .twod-history-table td{
+    padding:12px 10px; text-align:center; color:#1a237e; font-weight:bold; border-bottom:1px solid #e0e0e0;
+  }
+  #twodLiveRoot .twod-history-table tr:nth-child(even){ background:#e3f2fd; }
+
+  #twodLiveRoot .twod-gift-section{ padding:10px 12px 20px; display:none; background:#eceff3; margin:0 -20px; }
+  #twodLiveRoot .twod-gift-section.active{ display:block; }
+  #twodLiveRoot .twod-gift-filter-row{ display:flex; gap:8px; margin-bottom:12px; overflow-x:auto; padding-bottom:2px; }
+  #twodLiveRoot .twod-gift-filter-row::-webkit-scrollbar{ display:none; }
+  #twodLiveRoot .twod-gift-filter-chip{
+    flex-shrink:0; background:#fff; border:1px solid #d7dce6; color:#5b6472;
+    padding:8px 16px; border-radius:999px; font-size:12.5px; font-weight:700; cursor:pointer; transition:all .15s;
+  }
+  #twodLiveRoot .twod-gift-filter-chip.active{ background:#1a237e; border-color:#1a237e; color:#ffd700; }
+  #twodLiveRoot .twod-gift-list{ display:flex; flex-direction:column; gap:10px; }
+  #twodLiveRoot .twod-gift-loading{
+    display:flex; align-items:center; gap:10px; color:#b3e5fc; font-size:13px; padding:20px 4px;
+  }
+  #twodLiveRoot .twod-gift-empty{ text-align:center; color:#b3e5fc; padding:40px 20px; font-size:13.5px; }
+  #twodLiveRoot .twod-gift-card{
+    background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.2);
+  }
+  #twodLiveRoot .twod-gift-card-header{
+    display:flex; align-items:center; gap:10px; padding:12px 14px 8px;
+  }
+  #twodLiveRoot .twod-gift-card-avatar{
+    width:40px; height:40px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#e3f2fd;
+  }
+  #twodLiveRoot .twod-gift-card-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  #twodLiveRoot .twod-gift-card-headertext{ display:flex; flex-direction:column; }
+  #twodLiveRoot .twod-gift-card-pagename{ font-size:14px; font-weight:700; color:#050505; }
+  #twodLiveRoot .twod-gift-card-time{ font-size:12px; color:#65676b; }
+  #twodLiveRoot .twod-gift-card-body{ padding:2px 14px 12px; }
+  #twodLiveRoot .twod-gift-card-title{ font-size:15px; font-weight:700; color:#050505; margin-bottom:4px; }
+  #twodLiveRoot .twod-gift-card-desc{ font-size:14.5px; color:#050505; line-height:1.5; white-space:pre-wrap; }
+  #twodLiveRoot .twod-gift-card-img{ width:100%; overflow:hidden; background:#e3f2fd; }
+  #twodLiveRoot .twod-gift-card-img img{ width:100%; height:auto; display:block; }
+  #twodLiveRoot .twod-gift-card{ padding-bottom:10px; }
+  #twodLiveRoot .twod-gift-card-date{ display:none; }
+
+  /* ---- VIP gift card tag + lock ---- */
+  #twodLiveRoot .twod-gift-tag{
+    display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase;
+    padding:3px 9px; border-radius:999px; margin-bottom:6px;
+  }
+  #twodLiveRoot .twod-gift-tag.free{ background:#e3f9ee; color:#1fae6e; }
+  #twodLiveRoot .twod-gift-tag.vip{ background:#fff4d6; color:#a8790a; }
+  #twodLiveRoot .twod-gift-vip-joinrow{ padding:10px 14px 2px; }
+  #twodLiveRoot .twod-gift-vip-joinrow button{
+    width:100%; background:linear-gradient(135deg,#ffe9a8,#ffd54a); color:#7a5a00; border:none;
+    padding:10px 16px; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer; font-family:inherit;
+  }
+
+  /* ---- VIP account section (dark themed, matches 2D Live) ---- */
+  #twodLiveRoot .twod-vip-section{
+    padding:16px 4px 20px; display:none;
+    background:linear-gradient(180deg, #1a237e, #101a5e);
+  }
+  #twodLiveRoot .twod-vip-section.active{ display:block; }
+  #twodLiveRoot .twod-vip-header{ text-align:center; padding:10px 16px 24px; }
+  #twodLiveRoot .twod-vip-avatar{
+    width:64px; height:64px; border-radius:50%; margin:0 auto 12px;
+    background:linear-gradient(135deg,#ffd700,#c9a227); display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:800; color:#1a237e; box-shadow:0 8px 20px rgba(255,215,0,0.3);
+  }
+  #twodLiveRoot .twod-vip-name{ font-size:17px; font-weight:800; margin:0 0 4px; color:#fff; }
+  #twodLiveRoot .twod-vip-sub{ font-size:12.5px; color:#b3e5fc; }
+  #twodLiveRoot .twod-vip-status-chip{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:6px 14px; border-radius:999px;
+    font-size:12px; font-weight:700;
+  }
+  #twodLiveRoot .twod-vip-status-chip.approved{ background:rgba(76,175,80,0.2); color:#8ee08f; }
+  #twodLiveRoot .twod-vip-status-chip.pending{ background:rgba(255,215,0,0.18); color:#ffd700; }
+  #twodLiveRoot .twod-vip-status-chip.rejected{ background:rgba(200,90,61,0.2); color:#ff9d85; }
+  #twodLiveRoot .twod-vip-status-chip.guest{ background:rgba(255,255,255,0.12); color:#b3e5fc; }
+  #twodLiveRoot .twod-vip-panel{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:14px;
+    padding:20px; margin:0 12px 16px;
+  }
+  #twodLiveRoot .twod-vip-panel h3{ font-size:14.5px; font-weight:800; margin:0 0 12px; color:#fff; }
+  #twodLiveRoot .twod-vip-panel p.desc-text{ font-size:12.5px; color:#b3e5fc; line-height:1.75; margin:0 0 16px; }
+  #twodLiveRoot .twod-vip-id-highlight{
+    background:rgba(255,215,0,0.08); border:1.5px dashed rgba(255,215,0,0.4); border-radius:10px;
+    padding:14px; text-align:center; margin-bottom:14px;
+  }
+  #twodLiveRoot .twod-vip-id-highlight .label{ font-size:11px; color:#b3e5fc; margin-bottom:6px; }
+  #twodLiveRoot .twod-vip-id-highlight .value{ font-family:monospace; font-size:18px; font-weight:800; color:#ffd700; letter-spacing:0.03em; }
+  #twodLiveRoot .twod-vip-auth-tabs{ display:flex; gap:6px; background:rgba(255,255,255,0.06); border-radius:10px; padding:4px; margin-bottom:18px; }
+  #twodLiveRoot .twod-vip-auth-tab{
+    flex:1; text-align:center; padding:9px; border-radius:8px; font-size:12.5px; font-weight:700;
+    cursor:pointer; color:#b3e5fc; transition:all .15s;
+  }
+  #twodLiveRoot .twod-vip-auth-tab.active{ background:#ffd700; color:#1a237e; }
+  #twodLiveRoot .twod-vip-field{ text-align:left; margin-bottom:12px; }
+  #twodLiveRoot .twod-vip-field label{ display:block; font-size:11.5px; color:#b3e5fc; margin-bottom:6px; font-weight:600; }
+  #twodLiveRoot .twod-vip-field input{
+    width:100%; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.16); color:#fff;
+    padding:11px 14px; border-radius:8px; font-size:14px; outline:none; font-family:inherit;
+  }
+  #twodLiveRoot .twod-vip-field input:focus{ border-color:#ffd700; }
+  #twodLiveRoot .twod-vip-error{ color:#ff9d85; font-size:12px; margin:-4px 0 12px; min-height:14px; }
+  #twodLiveRoot .twod-vip-btn{
+    display:inline-flex; align-items:center; gap:7px; justify-content:center; width:100%;
+    border:none; padding:12px 20px; border-radius:999px; font-family:inherit; font-weight:700; font-size:13.5px;
+    cursor:pointer; transition:transform .15s, background .15s; margin-bottom:10px;
+  }
+  #twodLiveRoot .twod-vip-btn.primary{ background:#ffd700; color:#1a237e; }
+  #twodLiveRoot .twod-vip-btn.primary:hover{ transform:translateY(-1px); background:#ffe14d; }
+  #twodLiveRoot .twod-vip-btn.outline{ background:transparent; border:1.5px solid rgba(255,255,255,0.25); color:#fff; }
+  #twodLiveRoot .twod-vip-btn.danger{ background:rgba(200,90,61,0.2); color:#ff9d85; }
+  #twodLiveRoot .twod-vip-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+  #twodLiveRoot .twod-vip-spin{
+    display:inline-block; width:14px; height:14px; border-radius:50%;
+    border:2px solid rgba(26,35,126,0.35); border-top-color:#1a237e;
+    animation: spin .6s linear infinite; vertical-align:middle; margin-right:6px;
+  }
+  html:root[data-theme="light"], html[data-theme="light"]{
+    color-scheme: light;
+    --primary:#5b4fe8;
+    --primary-dark:#4a3fd6;
+    --primary-light:#efedfe;
+    --gold:#f5a623;
+    --ink:#181a2a;
+    --muted:#7a7f9a;
+    --muted-light:#9a9fb8;
+    --bg:#f7f7fb;
+    --card:#ffffff;
+    --border:#eceef5;
+    --green:#1fae6e;
+    --green-bg:#e3f9ee;
+  }
+  html[data-theme="light"] .hero{ background:linear-gradient(135deg, #efecff, #e7e2ff) !important; }
+  html[data-theme="light"] .hero-deco{ background:rgba(91,79,232,0.08) !important; }
+  html[data-theme="light"] .hero-deco.b{ background:rgba(91,79,232,0.06) !important; }
+  html[data-theme="light"] .btn-white{ border:1px solid rgba(24,26,42,0.08) !important; }
+  html[data-theme="light"] .book-cover{ background:linear-gradient(160deg, #ddd, #bbb) !important; box-shadow:0 6px 16px rgba(24,26,42,0.08) !important; }
+  html[data-theme="light"] .id-highlight{ background:linear-gradient(135deg, var(--primary-light), #f3effe) !important; border:1.5px dashed rgba(91,79,232,0.35) !important; }
+  html[data-theme="light"] .price-highlight{ background:linear-gradient(135deg, var(--primary-light), #f3effe) !important; border:1.5px dashed rgba(91,79,232,0.35) !important; }
+  html[data-theme="light"] .status-chip.pending{ background:#fff4e0 !important; color:#b8790a !important; }
+  html[data-theme="light"] .status-chip.rejected{ background:#fde9e9 !important; color:#c13a3a !important; }
+  html[data-theme="light"] .form-error{ color:#c13a3a !important; }
+  html[data-theme="light"] .lock-box{ border:1.5px dashed rgba(91,79,232,0.3) !important; }
+  html[data-theme="light"] .toast{ background:#181a2a !important; box-shadow:0 10px 30px rgba(0,0,0,0.25) !important; }
+  html[data-theme="light"] .modal{ box-shadow:0 -10px 40px rgba(0,0,0,0.2) !important; }
+  html[data-theme="light"] .notif-banner{ box-shadow:0 14px 34px rgba(24,26,42,0.18) !important; }
+  html[data-theme="light"] .spinner{ border-color:rgba(91,79,232,0.15) !important; border-top-color:var(--primary) !important; }
+  html[data-theme="light"] .page-loading-bar{ background:rgba(91,79,232,0.12) !important; }
+  html[data-theme="light"] .theme-toggle-btn .sun{ display:inline; }
+  html[data-theme="light"] .theme-toggle-btn .moon{ display:none; }
+  .theme-toggle-btn .moon{ display:inline; }
+  .theme-toggle-btn .sun{ display:none; }
+</style>
+</head>
+<body>
+<!-- JuicyAds loader (တစ်ခါတည်း load, ad zone တစ်ခုချင်းစီက အောက်မှာ ရှိပါတယ်) -->
+<script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+
+<div class="page-loading-bar" id="pageLoadingBar"><div class="bar"></div></div>
+
+<!-- ============ HOME PAGE ============ -->
+<div class="page active" id="page-home">
+  <header>
+    <div class="header-inner">
+      <div class="brand">Dr.X <span class="accent">Hub</span> 🎬</div>
+    </div>
+  </header>
+
+  <div class="banner-slider" id="bannerSlider" style="display:none;">
+    <div class="banner-slider-track" id="bannerSliderTrack"></div>
+    <div class="banner-slider-dots" id="bannerSliderDots"></div>
+  </div>
+
+  <!-- Adsterra: Banner 320x50 -->
+  <div style="display:flex; justify-content:center; margin:0 0 20px;">
+    <script>
+      atOptions = {
+        'key' : 'cb501092e362be3ab4fdd29c1228d4b6',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script src="https://www.highperformanceformat.com/cb501092e362be3ab4fdd29c1228d4b6/invoke.js"></script>
+  </div>
+
+  <!-- Video grid -->
+  <div class="section" id="videoSection">
+    <div class="section-head">
+      <h2>Video</h2>
+    </div>
+    <div class="video-grid" id="videoGrid">
+      <div class="video-skel"></div><div class="video-skel"></div><div class="video-skel"></div><div class="video-skel"></div>
+    </div>
+    <div class="empty" id="videoEmptyState" style="display:none;">Video မရှိသေးပါ</div>
+  </div>
+
+  <!-- JuicyAds -->
+  <div style="display:flex; justify-content:center; margin:4px 20px 8px;">
+    <ins id="1123685" data-width="308" data-height="286"></ins>
+    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1123685});</script>
+  </div>
+</div>
+
+
+<!-- ============ PROFILE PAGE ============ -->
+<div class="page" id="page-profile">
+  <header>
+    <div class="header-inner">
+      <div class="brand">Profile</div>
+    </div>
+  </header>
+
+  <div id="profileContent"></div>
+
+  <div id="installAppSection" style="display:none; padding:0 20px 20px;">
+    <button class="btn btn-primary" id="installAppBtn" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <span>📲</span><span>Install App</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============ VIDEO PAGE ============ -->
+<div class="page" id="page-videos">
+  <header>
+    <div class="header-inner">
+      <div class="brand">Dr.X <span>Hub</span></div>
+      <div class="header-icons">
+        <div class="icon-circle theme-toggle-btn" onclick="toggleTheme()" title="Dark / Light Mode">
+          <span class="moon">🌙</span><span class="sun">☀️</span>
+        </div>
+        <div class="icon-circle" onclick="openNotificationsModal()">
+          🔔<span class="dot-badge" id="notifDot"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="filter-row" id="filterRow">
+    <button class="filter-chip active" data-filter="all" onclick="setFilter('all')">အားလုံး</button>
+    <button class="filter-chip" id="twodLiveChip" onclick="goPage('twodlive')">🎯 2D Live</button>
+    <button class="filter-chip" data-filter="free" onclick="setFilter('free')">Free</button>
+    <button class="filter-chip" data-filter="premium" onclick="setFilter('premium')">Premium</button>
+  </div>
+
+  <!-- Adsterra: Banner 320x50 -->
+  <div style="display:flex; justify-content:center; margin:0 0 20px;">
+    <script>
+      atOptions = {
+        'key' : 'cb501092e362be3ab4fdd29c1228d4b6',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script src="https://www.highperformanceformat.com/cb501092e362be3ab4fdd29c1228d4b6/invoke.js"></script>
+  </div>
+
+  <!-- Free rail -->
+  <div class="section" id="freeSection">
+    <div class="section-head">
+      <h2>Free Books</h2>
+      <span class="view-all" onclick="setFilter('free')">View all ›</span>
+    </div>
+    <div class="rail" id="freeRail">
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+    <div class="rail-loading-text" id="freeRailLoadingText"><div class="spinner" style="width:16px;height:16px;border-width:2px;"></div> စာအုပ်များ ခေတ္တစောင့်ပါ...</div>
+  </div>
+
+  <!-- JuicyAds (between rails) -->
+  <div style="display:flex; justify-content:center; margin:4px 20px 22px;">
+    <ins id="1123683" data-width="158" data-height="168"></ins>
+    <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1123683});</script>
+  </div>
+
+  <!-- Premium rail -->
+  <div class="section" id="premiumSection">
+    <div class="section-head">
+      <h2>👑 Premium Books</h2>
+      <span class="view-all" onclick="setFilter('premium')">View all ›</span>
+    </div>
+    <div class="rail" id="premiumRail">
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+    <div class="rail-loading-text" id="premiumRailLoadingText"><div class="spinner" style="width:16px;height:16px;border-width:2px;"></div> စာအုပ်များ ခေတ္တစောင့်ပါ...</div>
+  </div>
+
+  <!-- Search/filtered results grid (shown when searching or filter != all) -->
+  <div class="section" id="resultsSection" style="display:none;">
+    <div class="section-head"><h2 id="resultsHeading">ရလဒ်များ</h2><span id="bookCount" style="font-size:12.5px; color:var(--muted);"></span></div>
+    <div class="full-grid" id="resultsGrid"></div>
+    <div class="empty" id="emptyState" style="display:none;">ဒီအမျိုးအစားအတွက် စာအုပ်မရှိသေးပါ။</div>
+  </div>
+</div>
+
+<!-- VIDEO PLAYER MODAL -->
+<div class="overlay" id="videoOverlay">
+  <div class="modal" id="videoModal"></div>
+</div>
+
+<!-- ============ 2D LIVE PAGE ============ -->
+<div class="page" id="page-twodlive">
+  <div id="twodLiveRoot"></div>
+</div>
+
+<!-- VIP ORDER MODAL (2D Site) -->
+<div class="overlay" id="vipOrderOverlay">
+  <div class="modal" id="vipOrderModal"></div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<!-- PWA INSTALL POPUP -->
+<div class="install-popup" id="installPopup">
+  <div class="install-icon">📲</div>
+  <div class="install-text">
+    <strong>Dr.X Hub App ကို Install လုပ်မလား?</strong>
+    <span>Home Screen ကနေ တိုက်ရိုက်ဖွင့်နိုင်အောင်</span>
+  </div>
+  <button class="install-btn" id="installPopupBtn">Install</button>
+  <button class="install-close" id="installPopupClose">✕</button>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" data-nav="home" onclick="goPage('home')">
+    <span class="nav-icon">🏠</span><span>Home</span>
+  </div>
+  <div class="nav-item" data-nav="videos" onclick="goPage('videos')">
+    <span class="nav-icon">📚</span><span>Book</span>
+  </div>
+  <div class="nav-item" data-nav="profile" onclick="goPage('profile')">
+    <span class="nav-icon">👤</span><span>Profile</span>
+  </div>
+</div>
+
+<!-- BOOK READ MODAL -->
+<div class="overlay" id="bookOverlay">
+  <div class="modal" id="bookModal"></div>
+</div>
+
+<!-- PREMIUM ORDER MODAL -->
+<div class="overlay" id="premiumOverlay">
+  <div class="modal" id="premiumModal"></div>
+</div>
+
+<!-- REALTIME NOTIFICATION BANNER (pops in when a push arrives while site is open) -->
+<div class="notif-banner" id="notifBanner" onclick="openNotificationsModal()">
+  <div class="notif-banner-icon">🔔</div>
+  <div class="notif-banner-text">
+    <p class="notif-banner-title" id="notifBannerTitle"></p>
+    <p class="notif-banner-msg" id="notifBannerMsg"></p>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS LIST MODAL -->
+<div class="overlay" id="notifOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>Notifications</h2><div class="meta">Admin ကနေ ပို့ထားသော message များ</div></div>
+      <button class="close-btn" onclick="closeNotificationsModal()">✕</button>
+    </div>
+    <div class="modal-body" id="notifListBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- THEME (Dark / Light) ---------------- */
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+  const bg = mode === 'light' ? '#f7f7fb' : '#0f0f16';
+  const ink = mode === 'light' ? '#181a2a' : '#f1f1f8';
+  document.documentElement.style.backgroundColor = bg;
+  document.body.style.backgroundColor = bg;
+  document.body.style.color = ink;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', bg);
+}
+function toggleTheme(){
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  const next = current === 'light' ? 'dark' : 'light';
+  localStorage.setItem('readhub_theme', next);
+  applyTheme(next);
+}
+(function initTheme(){
+  const saved = localStorage.getItem('readhub_theme');
+  applyTheme(saved === 'light' ? 'light' : 'dark');
+})();
+/* =========================================================
+   CONFIG — Supabase Project URL နှင့် anon public key ကို ထည့်ပါ
+   (Supabase Dashboard → Project Settings → API မှာ ရှာနိုင်ပါတယ်)
+   ========================================================= */
+const SUPABASE_URL = "https://pumzzoxnftounxgckold.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_DYPOucXVditiiW7R0BCwkQ_QamjYrFW";
+const TELEGRAM_LINK_FALLBACK = "https://t.me/your_username";
+
+function sanitizeTelegramLink(raw) {
+  let s = (raw || "").trim();
+  if (!s) return TELEGRAM_LINK_FALLBACK;
+  s = s.replace(/^@/, "");                 // "@username" ဆိုရင် @ ဖြုတ်
+  if (/^t\.me\//i.test(s)) s = "https://" + s;
+  else if (/^www\.t\.me\//i.test(s)) s = "https://" + s;
+  else if (!/^https?:\/\//i.test(s)) {
+    s = s.replace(/^\/+/, "");
+    s = "https://t.me/" + s;               // "username" ဆိုရင် t.me/ ကနေ ကိုယ်တိုင်ပြည့်
+  }
+  return s;
+}
+
+function openTelegramLink(evt, url) {
+  if (evt) evt.preventDefault();
+  const clean = sanitizeTelegramLink(url);
+  const win = window.open(clean, "_blank");
+  if (!win || win.closed || typeof win.closed === "undefined") {
+    // popup blocked or webview doesn't support target=_blank → navigate directly
+    window.location.href = clean;
+  }
+  return false;
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ---- 2D Live/Gift Card သီးသန့် Supabase Project (Book Shop project ကနေ ခွဲထားသည်) ----
+   👇 Supabase.com မှာ Project အသစ် ဆောက်ပြီး Project Settings → API ထဲက
+   Project URL နှင့် anon public key ကို ဒီနေရာမှာ လာထည့်ပါ */
+const TWOD_SUPABASE_URL = "https://znvaosikyiicyvnspkmh.supabase.co";
+const TWOD_SUPABASE_ANON_KEY = "sb_publishable_04wxAavPatruxsQdu-CK6Q_6XFGqwxC";
+
+const sb2d = window.supabase.createClient(TWOD_SUPABASE_URL, TWOD_SUPABASE_ANON_KEY);
+
+/* =========================================================
+   PREMIUM ORDER SYSTEM — imgbb (screenshot upload) + Telegram Bot (order alert)
+   ⚠️ ဒီ key/token တွေက browser code ထဲမှာဖြစ်လို့ page source ကြည့်ရင် မြင်နိုင်ပါတယ်။
+   ========================================================= */
+const IMGBB_API_URL = "https://api.imgbb.com/1/upload";
+const IMGBB_API_KEY = "1662e13f7d6ff541bca5dde2f9743091"; // 👈 imgbb.com → API key ကို ဒီနေရာမှာ ထည့်ပါ (https://api.imgbb.com/ မှာ free ရယူနိုင်ပါတယ်)
+const TG_BOT_TOKEN = "8838774504:AAGm3cuaecZ-2t_l9wUoAAuwfi0wqLHHIHQ";
+const TG_CHAT_ID = "5433723487";
+
+async function tgSendOrder(text, imageUrl) {
+  try {
+    if (imageUrl) {
+      await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendPhoto`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, photo: imageUrl, caption: text, parse_mode: "HTML" }),
+      });
+    } else {
+      await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: "HTML" }),
+      });
+    }
+    return { success: true };
+  } catch (e) { return { success: false, message: e.message }; }
+}
+
+async function uploadScreenshotToImgbb(file) {
+  if (!IMGBB_API_KEY) return { success: false, message: "imgbb API key ကို ဒီ file ထဲမှာ ထည့်ရသေးပါတယ် (Admin ကိုပြောပါ)" };
+  try {
+    const fd = new FormData();
+    fd.append("key", IMGBB_API_KEY);
+    fd.append("image", file);
+    const res = await fetch(IMGBB_API_URL, { method: "POST", body: fd });
+    const json = await res.json();
+    if (!json.success) return { success: false, message: "Screenshot upload မအောင်မြင်ပါ" };
+    return { success: true, url: json.data.url };
+  } catch (e) { return { success: false, message: e.message }; }
+}
+
+let ALL_BOOKS = [];
+let CURRENT_FILTER = "all";
+let ALL_VIDEOS = [];
+let VIDEOS_LOADED = false;
+let CURRENT_VIDEO = null;
+let TELEGRAM_LINK = TELEGRAM_LINK_FALLBACK;
+
+// Account session — USER_ID lives on the server (Users table) tied to phone+password,
+// so logging in on ANY browser/device recovers the same account & premium status.
+let USER_ID = localStorage.getItem("user_id") || null;
+let USER_NAME = localStorage.getItem("user_name") || null;
+let USER_PHONE = localStorage.getItem("user_phone") || null;
+let USER_STATUS = "guest"; // guest | pending | approved | rejected
+
+// 2D VIP account session — separate account system (2D Supabase project) from the Book Site account above.
+// VIP_ID lives on the server (vip_users table) tied to phone+password, so logging in on ANY
+// browser/device recovers the same VIP key & approval status.
+let VIP_ID = localStorage.getItem("twod_vip_id") || null;
+let VIP_NAME = localStorage.getItem("twod_vip_name") || null;
+let VIP_PHONE = localStorage.getItem("twod_vip_phone") || null;
+let VIP_STATUS = "guest"; // guest | pending | approved | rejected
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+let ACTIVE_REQUESTS = 0;
+function showLoadingBar() {
+  ACTIVE_REQUESTS++;
+  document.getElementById("pageLoadingBar").classList.add("show");
+}
+function hideLoadingBar() {
+  ACTIVE_REQUESTS = Math.max(0, ACTIVE_REQUESTS - 1);
+  if (ACTIVE_REQUESTS === 0) document.getElementById("pageLoadingBar").classList.remove("show");
+}
+
+// Simple one-way hash (matches the old Apps Script backend's scheme) —
+// fine for a low-stakes book site, NOT for high-security systems.
+function simpleHash(str) {
+  let hash = 0;
+  const s = String(str);
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash << 5) - hash + s.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(hash);
+}
+function genUserId() {
+  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return "USR-" + rand;
+}
+function genVipKey() {
+  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return "VIP-" + rand;
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* Ad scripts inserted via innerHTML don't execute (browsers block <script> tags added
+   this way). Wrapping each ad in its own srcdoc iframe makes it a normal, always-executable
+   element, and also keeps document.write() calls contained to that iframe instead of wiping
+   the whole page. Use these helpers anywhere an ad needs to render inside JS-generated HTML. */
+function adBannerHTML(key, width, height) {
+  const doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{overflow:hidden;background:transparent;}</style></head><body>'
+    + '<script>atOptions={"key":"' + key + '","format":"iframe","height":' + height + ',"width":' + width + ',"params":{}};<\/script>'
+    + '<script src="https://www.highperformanceformat.com/' + key + '/invoke.js"><\/script>'
+    + '</body></html>';
+  return `<iframe srcdoc="${escapeHtml(doc)}" width="${width}" height="${height}" style="border:none; max-width:100%;" scrolling="no" loading="lazy"></iframe>`;
+}
+
+function adNativeHTML() {
+  const doc = '<!DOCTYPE html><html><head><style>*{margin:0;padding:0;}body{background:transparent;}</style></head><body>'
+    + '<script async data-cfasync="false" src="https://pl30424237.effectivecpmnetwork.com/8bd93c86c4e4c635c55a73d36f0fa7d0/invoke.js"><\/script>'
+    + '<div id="container-8bd93c86c4e4c635c55a73d36f0fa7d0"></div>'
+    + '</body></html>';
+  return `<iframe srcdoc="${escapeHtml(doc)}" width="100%" height="100" style="border:none;" scrolling="no" loading="lazy"></iframe>`;
+}
+
+/* ---------------- DATA LAYER (Supabase) ----------------
+   These wrap Supabase calls and return objects shaped the same way
+   the old Apps Script API did (BookID, Title, ChapterNumber, etc.)
+   so the rendering code below didn't need to change. */
+
+async function dbGetBooks() {
+  showLoadingBar();
+  try {
+    // Book အရေအတွက် တစ်နေ့တစ်နေ့ တိုးလာလည်း Query size ကို ထိန်းချုပ်ဖို့ Cap ထားတယ်
+    // (Free/Premium rail တွေက item အနည်းငယ်ပဲ ပြရုံမို့ 200 ဆိုတာ ရာနှင့်ချီတဲ့ Book library
+    // အတွက် လုံလောက်ပါတယ်; ဒီထက်ကျော်လာရင် Pagination ထပ်ထည့်ရပါမယ်)
+    const { data, error } = await sb.from("books").select("*").order("created_at", { ascending: false }).limit(200);
+    if (error) throw error;
+    return { success: true, books: data.map(b => ({
+      BookID: b.id, Title: b.title, Author: b.author, CoverURL: b.cover_url,
+      Type: b.type, Description: b.description,
+    })) };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetBook(id) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("books").select("*").eq("id", id).single();
+    if (error) throw error;
+    return { success: true, book: {
+      BookID: data.id, Title: data.title, Author: data.author, CoverURL: data.cover_url,
+      Type: data.type, Description: data.description,
+    } };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetVideos() {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("videos").select("*").order("created_at", { ascending: false }).limit(200);
+    if (error) throw error;
+    return { success: true, videos: data.map(v => ({
+      VideoID: v.id, Title: v.title, ThumbnailURL: v.thumbnail_url, VideoURL: v.video_url,
+      Type: v.type, Description: v.description,
+    })) };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetVideo(id) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("videos").select("*").eq("id", id).single();
+    if (error) throw error;
+    return { success: true, video: {
+      VideoID: data.id, Title: data.title, ThumbnailURL: data.thumbnail_url, VideoURL: data.video_url,
+      Type: data.type, Description: data.description,
+    } };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetChapters(bookId) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("chapters").select("*").eq("book_id", bookId).order("chapter_number", { ascending: true });
+    if (error) throw error;
+    return { success: true, chapters: data.map(c => ({
+      ChapterID: c.id, BookID: c.book_id, ChapterNumber: c.chapter_number, ChapterTitle: c.chapter_title,
+    })) };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetChapter(id) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("chapters").select("*").eq("id", id).single();
+    if (error) throw error;
+    return { success: true, chapter: {
+      ChapterID: data.id, ChapterTitle: data.chapter_title, Content: data.content,
+    } };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbCheckUser(userId) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("users").select("*").eq("id", userId).maybeSingle();
+    if (error) throw error;
+    if (!data) return { success: false, message: "User not found" };
+    return { success: true, status: data.status, name: data.name, phone: data.phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbRegisterUser(name, phone, password) {
+  showLoadingBar();
+  try {
+    if (!name) return { success: false, message: "အမည် ထည့်ပါ" };
+    if (!phone) return { success: false, message: "ဖုန်းနံပါတ် ထည့်ပါ" };
+    if (!password || password.length < 4) return { success: false, message: "Password အနည်းဆုံး ၄ လုံး ထည့်ပါ" };
+
+    const { data: existing } = await sb.from("users").select("id").eq("phone", phone).maybeSingle();
+    if (existing) return { success: false, message: "ဒီဖုန်းနံပါတ်ဖြင့် Account ရှိပြီးသားပါ — Login ဝင်ပါ" };
+
+    const userId = genUserId();
+    const { error } = await sb.from("users").insert({
+      id: userId, name, phone, password_hash: simpleHash(password), status: "free",
+    });
+    if (error) throw error;
+    return { success: true, userId, status: "free", name, phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbLoginUser(phone, password) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("users").select("*").eq("phone", phone).maybeSingle();
+    if (error) throw error;
+    if (!data) return { success: false, message: "Account မတွေ့ပါ" };
+    if (data.password_hash !== simpleHash(password)) return { success: false, message: "Password မှားနေပါတယ်" };
+    return { success: true, userId: data.id, status: data.status, name: data.name, phone: data.phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbCheckVipUser(vipId) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb2d.from("vip_users").select("*").eq("id", vipId).maybeSingle();
+    if (error) throw error;
+    if (!data) return { success: false, message: "VIP Key not found" };
+    return { success: true, status: data.status, name: data.name, phone: data.phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbRegisterVipUser(name, phone, password) {
+  showLoadingBar();
+  try {
+    if (!name) return { success: false, message: "အမည် ထည့်ပါ" };
+    if (!phone) return { success: false, message: "ဖုန်းနံပါတ် ထည့်ပါ" };
+    if (!password || password.length < 4) return { success: false, message: "Password အနည်းဆုံး ၄ လုံး ထည့်ပါ" };
+
+    const { data: existing } = await sb2d.from("vip_users").select("id").eq("phone", phone).maybeSingle();
+    if (existing) return { success: false, message: "ဒီဖုန်းနံပါတ်ဖြင့် VIP Account ရှိပြီးသားပါ — Login ဝင်ပါ" };
+
+    const vipId = genVipKey();
+    const { error } = await sb2d.from("vip_users").insert({
+      id: vipId, name, phone, password_hash: simpleHash(password), status: "free",
+    });
+    if (error) throw error;
+    return { success: true, vipId, status: "free", name, phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbLoginVipUser(phone, password) {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb2d.from("vip_users").select("*").eq("phone", phone).maybeSingle();
+    if (error) throw error;
+    if (!data) return { success: false, message: "VIP Account မတွေ့ပါ" };
+    if (data.password_hash !== simpleHash(password)) return { success: false, message: "Password မှားနေပါတယ်" };
+    return { success: true, vipId: data.id, status: data.status, name: data.name, phone: data.phone };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbGetBannerSlides() {
+  try {
+    const { data, error } = await sb.from("banner_slides").select("*").order("sort_order", { ascending: true });
+    if (error) throw error;
+    return { success: true, slides: data || [] };
+  } catch (e) { return { success: false, slides: [] }; }
+}
+
+async function dbGetSettings() {
+  showLoadingBar();
+  try {
+    const { data, error } = await sb.from("settings").select("*");
+    if (error) throw error;
+    const map = {};
+    data.forEach(r => map[r.key] = r.value);
+    return {
+      success: true,
+      telegramLink: map.telegram_link,
+      announcement: map.site_announcement,
+      premiumPrice: map.premium_price || "0",
+      kbzName: map.kbz_name || "",
+      kbzNumber: map.kbz_number || "",
+      waveName: map.wave_name || "",
+      waveNumber: map.wave_number || "",
+    };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+async function dbSaveSetting(key, value) {
+  try {
+    const { error } = await sb.from("settings").upsert({ key, value: String(value) });
+    if (error) throw error;
+    return { success: true };
+  } catch (e) { return { success: false, message: e.message }; }
+}
+
+async function dbSubmitPremiumOrder(order) {
+  showLoadingBar();
+  try {
+    const { error } = await sb.from("premium_orders").insert({
+      user_id: order.userId, user_name: order.userName, user_phone: order.userPhone,
+      amount: order.amount, payment_method: order.method, screenshot_url: order.screenshotUrl,
+      status: "pending",
+    });
+    if (error) throw error;
+    return { success: true };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+/* ---- 2D Site equivalents (separate Supabase project: sb2d) ---- */
+async function dbGetVipSettings() {
+  try {
+    const { data, error } = await sb2d.from("settings").select("*");
+    if (error) throw error;
+    const map = {};
+    data.forEach(r => map[r.key] = r.value);
+    return {
+      success: true,
+      vipPrice: map.vip_price || "0",
+      kbzName: map.kbz_name || "",
+      kbzNumber: map.kbz_number || "",
+      waveName: map.wave_name || "",
+      waveNumber: map.wave_number || "",
+    };
+  } catch (e) { return { success: false, message: e.message }; }
+}
+
+async function dbSaveVipSetting(key, value) {
+  try {
+    const { error } = await sb2d.from("settings").upsert({ key, value: String(value) });
+    if (error) throw error;
+    return { success: true };
+  } catch (e) { return { success: false, message: e.message }; }
+}
+
+async function dbSubmitVipOrder(order) {
+  showLoadingBar();
+  try {
+    const { error } = await sb2d.from("premium_orders").insert({
+      user_id: order.userId, user_name: order.userName, user_phone: order.userPhone,
+      amount: order.amount, payment_method: order.method, screenshot_url: order.screenshotUrl,
+      status: "pending",
+    });
+    if (error) throw error;
+    return { success: true };
+  } catch (e) { return { success: false, message: e.message }; }
+  finally { hideLoadingBar(); }
+}
+
+/* ---------------- PAGE NAV ---------------- */
+function goPage(name) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById("page-" + name).classList.add("active");
+  document.querySelectorAll(".nav-item[data-nav]").forEach(n => n.classList.toggle("active", n.dataset.nav === name));
+  document.querySelector(".bottom-nav").style.display = (name === "twodlive") ? "none" : "";
+  window.scrollTo({ top: 0, behavior: "instant" });
+  if (name === "profile") renderProfilePage();
+  if (name === "twodlive") initTwodLive();
+  if (name === "videos" && !VIDEOS_LOADED) loadVideos();
+}
+
+function scrollToBooks() {
+  document.getElementById("freeSection").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ---------------- LOAD BOOKS ---------------- */
+async function loadBooks() {
+  try {
+    const data = await dbGetBooks();
+    if (data.success) {
+      ALL_BOOKS = data.books;
+      renderBooks();
+    } else {
+      showToast("စာအုပ်များ ဆွဲယူ၍ မရပါ");
+    }
+  } catch (e) {
+    document.getElementById("freeRail").innerHTML = "";
+    document.getElementById("premiumRail").innerHTML = "";
+    showToast("Supabase config ကို စစ်ပေးပါ");
+  } finally {
+    document.getElementById("freeRailLoadingText").style.display = "none";
+    document.getElementById("premiumRailLoadingText").style.display = "none";
+  }
+}
+
+function setFilter(f) {
+  CURRENT_FILTER = f;
+  document.querySelectorAll(".filter-chip").forEach(b => b.classList.toggle("active", b.dataset.filter === f));
+  renderBooks();
+  if (f !== "all") scrollToBooks();
+}
+
+function bookCardHtml(b) {
+  const isPremium = (b.Type || "free").toLowerCase() === "premium";
+  const isUnlocked = !isPremium || USER_STATUS === "approved";
+  const coverContent = b.CoverURL
+    ? `<img src="${escapeHtml(b.CoverURL)}" alt="">`
+    : `<span class="fallback-title">${escapeHtml(b.Title || "")}</span>`;
+  return `
+    <div class="book-card" onclick="openBook('${b.BookID}')">
+      <div class="book-cover" style="${!b.CoverURL ? 'background:linear-gradient(160deg,#7d76e8,#4a3fd6);' : ''}">
+        ${coverContent}
+        <span class="tag-pill ${isPremium ? 'premium' : 'free'}">${isPremium ? 'Premium' : 'Free'}</span>
+        ${isPremium && !isUnlocked ? `<div class="lock-icon"><span>🔒</span></div>` : ''}
+      </div>
+      <p class="book-title">${escapeHtml(b.Title || "အမည်မဲ့")}</p>
+      <div class="book-meta">
+        <span>${escapeHtml(b.Author || "")}</span>
+      </div>
+    </div>`;
+}
+
+function renderBooks() {
+  const q = "";
+  const searching = CURRENT_FILTER !== "all";
+
+  const freeSection = document.getElementById("freeSection");
+  const premiumSection = document.getElementById("premiumSection");
+  const resultsSection = document.getElementById("resultsSection");
+
+  if (!searching) {
+    // Home rails view
+    freeSection.style.display = "";
+    premiumSection.style.display = "";
+    resultsSection.style.display = "none";
+
+    const freeBooks = ALL_BOOKS.filter(b => (b.Type || "free").toLowerCase() === "free");
+    const premiumBooks = ALL_BOOKS.filter(b => (b.Type || "").toLowerCase() === "premium");
+
+    // Home rail တွေမှာ item အနည်းငယ်ပဲ ပြမယ် (DOM size/image load ချွေတာဖို့) —
+    // "View all" နှိပ်ရင် filter view ကနေ အားလုံးကို မြင်ရမယ်
+    const RAIL_DISPLAY_CAP = 15;
+    document.getElementById("freeRail").innerHTML = freeBooks.length
+      ? freeBooks.slice(0, RAIL_DISPLAY_CAP).map(bookCardHtml).join("")
+      : `<div class="empty" style="width:100%;">Free စာအုပ် မရှိသေးပါ</div>`;
+    document.getElementById("premiumRail").innerHTML = premiumBooks.length
+      ? premiumBooks.slice(0, RAIL_DISPLAY_CAP).map(bookCardHtml).join("")
+      : `<div class="empty" style="width:100%;">Premium စာအုပ် မရှိသေးပါ</div>`;
+    return;
+  }
+
+  // Search / filtered grid view
+  freeSection.style.display = "none";
+  premiumSection.style.display = "none";
+  resultsSection.style.display = "";
+
+  let list = ALL_BOOKS.filter(b => {
+    const matchesFilter = CURRENT_FILTER === "all" || (b.Type || "free").toLowerCase() === CURRENT_FILTER;
+    const matchesQuery = !q || (b.Title || "").toLowerCase().includes(q) || (b.Author || "").toLowerCase().includes(q);
+    return matchesFilter && matchesQuery;
+  });
+
+  document.getElementById("resultsHeading").textContent = q ? "ရှာဖွေမှုရလဒ်" : (CURRENT_FILTER === "premium" ? "Premium Books" : "Free Books");
+  document.getElementById("bookCount").textContent = list.length + " အုပ်";
+  const grid = document.getElementById("resultsGrid");
+  const empty = document.getElementById("emptyState");
+
+  if (list.length === 0) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+  grid.innerHTML = list.map(bookCardHtml).join("");
+}
+
+/* ---------------- LOAD VIDEOS ---------------- */
+async function loadVideos() {
+  VIDEOS_LOADED = true;
+  try {
+    const data = await dbGetVideos();
+    if (data.success) {
+      ALL_VIDEOS = data.videos;
+      renderVideos();
+    } else {
+      showToast("Video များ ဆွဲယူ၍ မရပါ");
+    }
+  } catch (e) {
+    document.getElementById("videoGrid").innerHTML = "";
+    showToast("Supabase config ကို စစ်ပေးပါ");
+  }
+}
+
+function videoCardHtml(v) {
+  const thumbContent = v.ThumbnailURL
+    ? `<img src="${escapeHtml(v.ThumbnailURL)}" alt="">`
+    : `<span class="fallback-title">${escapeHtml(v.Title || "")}</span>`;
+  return `
+    <div class="video-card" onclick="openVideo('${v.VideoID}')">
+      <div class="video-thumb" style="${!v.ThumbnailURL ? 'background:linear-gradient(160deg,#7d76e8,#4a3fd6);' : ''}">
+        ${thumbContent}
+        <div class="video-play-badge">▶</div>
+        <span class="video-badge-hd">HD</span>
+      </div>
+      <p class="video-card-title">${escapeHtml(v.Title || "အမည်မဲ့")}</p>
+    </div>`;
+}
+
+function videoAdCard300x250() {
+  return `
+    <div style="grid-column:1 / -1; display:flex; justify-content:center; margin:4px 0;">
+      ${adBannerHTML('1c526f76ccfda869b353f53f05191ba1', 300, 250)}
+    </div>`;
+}
+
+function videoAdCard468x60() {
+  return `
+    <div style="grid-column:1 / -1; display:flex; justify-content:center; margin:4px 0; overflow:hidden;">
+      ${adBannerHTML('658b2d8c3ba2a5d3ded6ddc04ab171f2', 468, 60)}
+    </div>`;
+}
+
+function renderVideos() {
+  const grid = document.getElementById("videoGrid");
+  const empty = document.getElementById("videoEmptyState");
+
+  if (!ALL_VIDEOS.length) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+  const html = [];
+  ALL_VIDEOS.forEach((v, i) => {
+    html.push(videoCardHtml(v));
+    if ((i + 1) % 6 === 0) {
+      html.push(videoAdCard300x250());
+      html.push(videoAdCard468x60());
+    }
+  });
+  grid.innerHTML = html.join("");
+}
+
+/* ---------------- VIDEO PLAYER MODAL ---------------- */
+async function openVideo(id) {
+  // Popunder on video click
+  var popunderUrl = 'https://pl30424234.effectivecpmnetwork.com/6c/c6/2f/6cc62fc95d3e0d1eafa72c8dcf8c6b37.js';
+  var s = document.createElement('script');
+  s.src = popunderUrl;
+  document.body.appendChild(s);
+
+  const overlay = document.getElementById("videoOverlay");
+  const modal = document.getElementById("videoModal");
+  modal.innerHTML = `<div class="modal-loading"><div class="spinner"></div><p>Video ခေတ္တစောင့်ပါ...</p></div>`;
+  overlay.classList.add("open");
+
+  const data = await dbGetVideo(id);
+  if (!data.success) {
+    modal.innerHTML = `<div class="modal-body">Video မတွေ့ပါ</div>`;
+    return;
+  }
+  CURRENT_VIDEO = data.video;
+
+  renderInterstitialAd();
+}
+
+function renderInterstitialAd() {
+  const modal = document.getElementById("videoModal");
+  const v = CURRENT_VIDEO;
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>${escapeHtml(v.Title || "")}</h2></div>
+      <button class="close-btn" onclick="closeVideo()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <div style="text-align:center; font-size:13px; color:var(--muted); margin-bottom:10px;">ကြော်ငြာအနည်းငယ်ကြာ ကြည့်ရှုပြီးမှ Video ကို ဆက်ကြည့်နိုင်ပါမည်</div>
+      <div style="display:flex; justify-content:center; margin:14px 0;">
+        ${adBannerHTML('cb501092e362be3ab4fdd29c1228d4b6', 320, 50)}
+      </div>
+      <button class="btn btn-primary" id="continueToVideoBtn" style="width:100%; margin-top:10px;" disabled>Video ကြည့်မယ် (5)</button>
+    </div>`;
+
+  let seconds = 5;
+  const btn = document.getElementById("continueToVideoBtn");
+  const timer = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(timer);
+      btn.disabled = false;
+      btn.textContent = "Video ကြည့်မယ် ▶";
+      btn.onclick = () => renderVideoPlayer();
+    } else {
+      btn.textContent = `Video ကြည့်မယ် (${seconds})`;
+    }
+  }, 1000);
+}
+
+function renderVideoPlayer() {
+  const modal = document.getElementById("videoModal");
+  const v = CURRENT_VIDEO;
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>${escapeHtml(v.Title || "")}</h2></div>
+      <button class="close-btn" onclick="closeVideo()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0;">
+      <div class="video-player-wrap">
+        <iframe src="${escapeHtml(v.VideoURL)}" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+      </div>
+      <div style="display:flex; justify-content:center; margin:14px 0;">
+        ${adBannerHTML('cb501092e362be3ab4fdd29c1228d4b6', 320, 50)}
+      </div>
+      <div style="margin:16px 20px;">
+        ${adNativeHTML()}
+      </div>
+      <div class="desc" style="padding:16px 20px;">${escapeHtml(v.Description || "")}</div>
+    </div>`;
+}
+
+function closeVideo() {
+  const player = document.getElementById("mainVideoPlayer");
+  if (player) { player.pause(); }
+  document.getElementById("videoOverlay").classList.remove("open");
+  CURRENT_VIDEO = null;
+}
+
+/* ---------------- BOOK READ MODAL ---------------- */
+let CURRENT_BOOK = null;
+let CURRENT_CHAPTERS = [];
+let CURRENT_CHAPTER_INDEX = -1;
+
+async function openBook(id) {
+  const overlay = document.getElementById("bookOverlay");
+  const modal = document.getElementById("bookModal");
+  modal.innerHTML = `<div class="modal-loading"><div class="spinner"></div><p>စာအုပ် ခေတ္တစောင့်ပါ...</p></div>`;
+  overlay.classList.add("open");
+
+  const data = await dbGetBook(id);
+  if (!data.success) {
+    modal.innerHTML = `<div class="modal-body">စာအုပ် မတွေ့ပါ</div>`;
+    return;
+  }
+  CURRENT_BOOK = data.book;
+  const isPremium = (CURRENT_BOOK.Type || "free").toLowerCase() === "premium";
+  const unlocked = !isPremium || USER_STATUS === "approved";
+
+  if (!unlocked) {
+    renderLockedView();
+    return;
+  }
+
+  modal.innerHTML = `<div class="modal-loading"><div class="spinner"></div><p>မာတိကာ ခေတ္တစောင့်ပါ...</p></div>`;
+  const chData = await dbGetChapters(id);
+  CURRENT_CHAPTERS = chData.success ? chData.chapters : [];
+  renderChapterList();
+}
+
+function renderLockedView() {
+  const modal = document.getElementById("bookModal");
+  const b = CURRENT_BOOK;
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>${escapeHtml(b.Title || "")}</h2><div class="meta">${escapeHtml(b.Author || "")}</div></div>
+      <button class="close-btn" onclick="closeBook()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="desc">${escapeHtml(b.Description || "")}</div>
+      <div class="lock-box">
+        <div class="icon">🔒</div>
+        <h3>ဒါက Premium စာအုပ်ပါ</h3>
+        <p>ဒီစာအုပ်ကိုဖတ်ဖို့ အကောင့်ဝင်ပြီး Premium ဝင်ရပါမယ်။</p>
+        <button class="btn btn-primary" onclick="closeBook(); goPage('profile');">အကောင့်ကြည့်မယ်</button>
+      </div>
+    </div>`;
+}
+
+function renderChapterList() {
+  const modal = document.getElementById("bookModal");
+  const b = CURRENT_BOOK;
+  let bodyHtml = `<div class="desc">${escapeHtml(b.Description || "")}</div>`;
+
+  if (CURRENT_CHAPTERS.length === 0) {
+    bodyHtml += `<p style="color:var(--muted); font-size:14px;">မာတိကာ မရေးရသေးပါ။</p>`;
+  } else {
+    bodyHtml += `<div class="toc-list">` + CURRENT_CHAPTERS.map((c, i) => `
+      <div class="toc-item" onclick="openChapter(${i})">
+        <span class="toc-num">${escapeHtml(c.ChapterNumber)}</span>
+        <span class="toc-title">${escapeHtml(c.ChapterTitle || "အမည်မဲ့")}</span>
+        <span class="toc-arrow">›</span>
+      </div>`).join("") + `</div>`;
+  }
+
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>${escapeHtml(b.Title || "")}</h2><div class="meta">${escapeHtml(b.Author || "")}</div></div>
+      <button class="close-btn" onclick="closeBook()">✕</button>
+    </div>
+    <div class="modal-body">${bodyHtml}</div>`;
+}
+
+async function openChapter(index) {
+  CURRENT_CHAPTER_INDEX = index;
+  const chMeta = CURRENT_CHAPTERS[index];
+  const modal = document.getElementById("bookModal");
+  modal.innerHTML = `<div class="modal-loading"><div class="spinner"></div><p>အခန်း ခေတ္တစောင့်ပါ...</p></div>`;
+
+  const data = await dbGetChapter(chMeta.ChapterID);
+  if (!data.success) {
+    modal.innerHTML = `<div class="modal-body">အခန်း မတွေ့ပါ</div>`;
+    return;
+  }
+  const ch = data.chapter;
+  const hasPrev = index > 0;
+  const hasNext = index < CURRENT_CHAPTERS.length - 1;
+
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div>
+        <button class="back-link" onclick="renderChapterList()">‹ မာတိကာ</button>
+        <h2 style="margin-top:8px;">${escapeHtml(ch.ChapterTitle || "")}</h2>
+        <div class="meta">${escapeHtml(CURRENT_BOOK.Title || "")}</div>
+      </div>
+      <button class="close-btn" onclick="closeBook()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="reading">${escapeHtml(ch.Content || "( စာသား မရေးရသေးပါ )")}</div>
+      <div class="chapter-nav">
+        <button class="btn btn-outline" ${hasPrev ? "" : "disabled"} onclick="openChapter(${index - 1})">‹ အရင်အခန်း</button>
+        <button class="btn btn-outline" ${hasNext ? "" : "disabled"} onclick="openChapter(${index + 1})">နောက်အခန်း ›</button>
+      </div>
+    </div>`;
+}
+function closeBook() { document.getElementById("bookOverlay").classList.remove("open"); }
+
+/* ---------------- PREMIUM ORDER FLOW (Book Site) ---------------- */
+let PREMIUM_SELECTED_METHOD = null;
+let PREMIUM_SCREENSHOT_FILE = null;
+
+function openPremiumOrderModal() {
+  if (!USER_ID) { showToast("အရင် Account ဝင်ပါ"); return; }
+  PREMIUM_SELECTED_METHOD = null;
+  PREMIUM_SCREENSHOT_FILE = null;
+  const overlay = document.getElementById("premiumOverlay");
+  const modal = document.getElementById("premiumModal");
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>Premium ဝင်မယ်</h2><div class="meta">Payment ပြီးရင် Screenshot တင်ပေးပါ</div></div>
+      <button class="close-btn" onclick="closePremiumOrderModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="price-highlight">
+        <div class="label">Premium စာအုပ်များအတွက် ကြေးငွေ</div>
+        <div class="value">${escapeHtml(PREMIUM_PRICE)} Ks</div>
+      </div>
+
+      <div class="form-field">
+        <label>အမည်</label>
+        <input type="text" id="premOrderName" value="${escapeHtml(USER_NAME || "")}" readonly>
+      </div>
+      <div class="form-field">
+        <label>User ID</label>
+        <input type="text" id="premOrderUserId" value="${escapeHtml(USER_ID || "")}" readonly>
+      </div>
+      <div class="form-field">
+        <label>ဖုန်းနံပါတ်</label>
+        <input type="text" id="premOrderPhone" value="${escapeHtml(USER_PHONE || "")}" readonly>
+      </div>
+
+      <div class="form-field" style="margin-top:18px;">
+        <label>Payment Method ရွေးပါ</label>
+      </div>
+      <div class="pay-method-grid">
+        <div class="pay-method-card" id="pmCardKbz" onclick="selectPayMethod('kbz')">
+          <div class="pm-icon"><img src="https://i.ibb.co/zTbxy6Zn/download-4.png" alt="KBZ Pay"></div><div class="pm-name">KBZ Pay</div>
+        </div>
+        <div class="pay-method-card" id="pmCardWave" onclick="selectPayMethod('wave')">
+          <div class="pm-icon"><img src="https://i.ibb.co/3m3rPzX4/download-1.jpg" alt="Wave Pay"></div><div class="pm-name">Wave Pay</div>
+        </div>
+      </div>
+
+      <div class="pay-detail-box" id="pmDetailKbz">
+        <div class="row"><span class="k">Name</span><span class="v">${escapeHtml(KBZ_NAME || "—")}</span></div>
+        <div class="row"><span class="k">Number</span><span class="v">${escapeHtml(KBZ_NUMBER || "—")}</span></div>
+      </div>
+      <div class="pay-detail-box" id="pmDetailWave">
+        <div class="row"><span class="k">Name</span><span class="v">${escapeHtml(WAVE_NAME || "—")}</span></div>
+        <div class="row"><span class="k">Number</span><span class="v">${escapeHtml(WAVE_NUMBER || "—")}</span></div>
+      </div>
+
+      <div class="form-field">
+        <label>Payment Screenshot တင်ပါ</label>
+      </div>
+      <div class="upload-box" id="premUploadBox">
+        <input type="file" accept="image/*" id="premScreenshotInput" onchange="handleScreenshotSelected(event)">
+        <div id="premUploadPlaceholder">
+          <div style="font-size:26px;">📷</div>
+          <div class="hint">ဒီနေရာကို နှိပ်ပြီး Screenshot ရွေးပါ</div>
+        </div>
+      </div>
+      <div class="form-error" id="premOrderError"></div>
+
+      <button class="btn btn-primary full" id="premSubmitBtn" onclick="submitPremiumOrder()">Order တင်မယ်</button>
+    </div>`;
+  overlay.classList.add("open");
+}
+
+function closePremiumOrderModal() { document.getElementById("premiumOverlay").classList.remove("open"); }
+
+function selectPayMethod(method) {
+  PREMIUM_SELECTED_METHOD = method;
+  document.getElementById("pmCardKbz").classList.toggle("selected", method === "kbz");
+  document.getElementById("pmCardWave").classList.toggle("selected", method === "wave");
+  document.getElementById("pmDetailKbz").classList.toggle("show", method === "kbz");
+  document.getElementById("pmDetailWave").classList.toggle("show", method === "wave");
+}
+
+function handleScreenshotSelected(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  PREMIUM_SCREENSHOT_FILE = file;
+  const box = document.getElementById("premUploadBox");
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    box.classList.add("has-image");
+    document.getElementById("premUploadPlaceholder").outerHTML = `<img src="${e.target.result}" alt="">`;
+    // re-attach a fresh file input on top since outerHTML wiped the old one's sibling reference
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = "image/*"; input.id = "premScreenshotInput";
+    input.onchange = handleScreenshotSelected;
+    box.appendChild(input);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitPremiumOrder() {
+  const errEl = document.getElementById("premOrderError");
+  errEl.textContent = "";
+  if (!PREMIUM_SELECTED_METHOD) { errEl.textContent = "Payment Method ရွေးပါ"; return; }
+  if (!PREMIUM_SCREENSHOT_FILE) { errEl.textContent = "Payment Screenshot တင်ပါ"; return; }
+
+  const btn = document.getElementById("premSubmitBtn");
+  btn.disabled = true; btn.textContent = "ပို့နေသည်...";
+
+  const upload = await uploadScreenshotToImgbb(PREMIUM_SCREENSHOT_FILE);
+  if (!upload.success) {
+    errEl.textContent = upload.message || "Screenshot upload မအောင်မြင်ပါ";
+    btn.disabled = false; btn.textContent = "Order တင်မယ်";
+    return;
+  }
+
+  const order = {
+    userId: USER_ID, userName: USER_NAME, userPhone: USER_PHONE,
+    amount: PREMIUM_PRICE, method: PREMIUM_SELECTED_METHOD, screenshotUrl: upload.url,
+  };
+  const saved = await dbSubmitPremiumOrder(order);
+  if (!saved.success) {
+    errEl.textContent = saved.message || "Order တင်၍မရပါ";
+    btn.disabled = false; btn.textContent = "Order တင်မယ်";
+    return;
+  }
+
+  const methodLabel = PREMIUM_SELECTED_METHOD === "kbz" ? "KBZ Pay" : "Wave Pay";
+  const msg = `📚 <b>Premium Order (Book Site)</b>\n` +
+    `👤 Name: ${escapeHtml(USER_NAME || "")}\n` +
+    `🆔 User ID: ${escapeHtml(USER_ID || "")}\n` +
+    `📱 Phone: ${escapeHtml(USER_PHONE || "")}\n` +
+    `💰 Amount: ${escapeHtml(PREMIUM_PRICE)} Ks\n` +
+    `💳 Method: ${methodLabel}`;
+  await tgSendOrder(msg, upload.url);
+
+  btn.textContent = "ပို့ပြီးပါပြီ ✓";
+  showToast("Order ပို့ပြီးပါပြီ — Admin approve စောင့်ပါ");
+  setTimeout(() => { closePremiumOrderModal(); }, 900);
+}
+
+/* ---------------- VIP ORDER FLOW (2D Site) ---------------- */
+let VIP_SELECTED_METHOD = null;
+let VIP_SCREENSHOT_FILE = null;
+
+function openVipOrderModal() {
+  if (!VIP_ID) { showToast("အရင် VIP Account ဝင်ပါ"); return; }
+  VIP_SELECTED_METHOD = null;
+  VIP_SCREENSHOT_FILE = null;
+  const overlay = document.getElementById("vipOrderOverlay");
+  const modal = document.getElementById("vipOrderModal");
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><h2>VIP ဝင်မယ်</h2><div class="meta">Payment ပြီးရင် Screenshot တင်ပေးပါ</div></div>
+      <button class="close-btn" onclick="closeVipOrderModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="price-highlight">
+        <div class="label">VIP အတွက် ကြေးငွေ</div>
+        <div class="value">${escapeHtml(VIP_PRICE)} Ks</div>
+      </div>
+
+      <div class="form-field">
+        <label>အမည်</label>
+        <input type="text" id="vipOrderName" value="${escapeHtml(VIP_NAME || "")}" readonly>
+      </div>
+      <div class="form-field">
+        <label>VIP Key</label>
+        <input type="text" id="vipOrderVipId" value="${escapeHtml(VIP_ID || "")}" readonly>
+      </div>
+      <div class="form-field">
+        <label>ဖုန်းနံပါတ်</label>
+        <input type="text" id="vipOrderPhone" value="${escapeHtml(VIP_PHONE || "")}" readonly>
+      </div>
+
+      <div class="form-field" style="margin-top:18px;">
+        <label>Payment Method ရွေးပါ</label>
+      </div>
+      <div class="pay-method-grid">
+        <div class="pay-method-card" id="vipPmCardKbz" onclick="selectVipPayMethod('kbz')">
+          <div class="pm-icon"><img src="https://i.ibb.co/zTbxy6Zn/download-4.png" alt="KBZ Pay"></div><div class="pm-name">KBZ Pay</div>
+        </div>
+        <div class="pay-method-card" id="vipPmCardWave" onclick="selectVipPayMethod('wave')">
+          <div class="pm-icon"><img src="https://i.ibb.co/3m3rPzX4/download-1.jpg" alt="Wave Pay"></div><div class="pm-name">Wave Pay</div>
+        </div>
+      </div>
+
+      <div class="pay-detail-box" id="vipPmDetailKbz">
+        <div class="row"><span class="k">Name</span><span class="v">${escapeHtml(VIP_KBZ_NAME || "—")}</span></div>
+        <div class="row"><span class="k">Number</span><span class="v">${escapeHtml(VIP_KBZ_NUMBER || "—")}</span></div>
+      </div>
+      <div class="pay-detail-box" id="vipPmDetailWave">
+        <div class="row"><span class="k">Name</span><span class="v">${escapeHtml(VIP_WAVE_NAME || "—")}</span></div>
+        <div class="row"><span class="k">Number</span><span class="v">${escapeHtml(VIP_WAVE_NUMBER || "—")}</span></div>
+      </div>
+
+      <div class="form-field">
+        <label>Payment Screenshot တင်ပါ</label>
+      </div>
+      <div class="upload-box" id="vipUploadBox">
+        <input type="file" accept="image/*" id="vipScreenshotInput" onchange="handleVipScreenshotSelected(event)">
+        <div id="vipUploadPlaceholder">
+          <div style="font-size:26px;">📷</div>
+          <div class="hint">ဒီနေရာကို နှိပ်ပြီး Screenshot ရွေးပါ</div>
+        </div>
+      </div>
+      <div class="form-error" id="vipOrderError"></div>
+
+      <button class="btn btn-primary full" id="vipSubmitBtn" onclick="submitVipOrder()">Order တင်မယ်</button>
+    </div>`;
+  overlay.classList.add("open");
+}
+
+function closeVipOrderModal() { document.getElementById("vipOrderOverlay").classList.remove("open"); }
+
+function selectVipPayMethod(method) {
+  VIP_SELECTED_METHOD = method;
+  document.getElementById("vipPmCardKbz").classList.toggle("selected", method === "kbz");
+  document.getElementById("vipPmCardWave").classList.toggle("selected", method === "wave");
+  document.getElementById("vipPmDetailKbz").classList.toggle("show", method === "kbz");
+  document.getElementById("vipPmDetailWave").classList.toggle("show", method === "wave");
+}
+
+function handleVipScreenshotSelected(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  VIP_SCREENSHOT_FILE = file;
+  const box = document.getElementById("vipUploadBox");
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    box.classList.add("has-image");
+    document.getElementById("vipUploadPlaceholder").outerHTML = `<img src="${e.target.result}" alt="">`;
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = "image/*"; input.id = "vipScreenshotInput";
+    input.onchange = handleVipScreenshotSelected;
+    box.appendChild(input);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitVipOrder() {
+  const errEl = document.getElementById("vipOrderError");
+  errEl.textContent = "";
+  if (!VIP_SELECTED_METHOD) { errEl.textContent = "Payment Method ရွေးပါ"; return; }
+  if (!VIP_SCREENSHOT_FILE) { errEl.textContent = "Payment Screenshot တင်ပါ"; return; }
+
+  const btn = document.getElementById("vipSubmitBtn");
+  btn.disabled = true; btn.textContent = "ပို့နေသည်...";
+
+  const upload = await uploadScreenshotToImgbb(VIP_SCREENSHOT_FILE);
+  if (!upload.success) {
+    errEl.textContent = upload.message || "Screenshot upload မအောင်မြင်ပါ";
+    btn.disabled = false; btn.textContent = "Order တင်မယ်";
+    return;
+  }
+
+  const order = {
+    userId: VIP_ID, userName: VIP_NAME, userPhone: VIP_PHONE,
+    amount: VIP_PRICE, method: VIP_SELECTED_METHOD, screenshotUrl: upload.url,
+  };
+  const saved = await dbSubmitVipOrder(order);
+  if (!saved.success) {
+    errEl.textContent = saved.message || "Order တင်၍မရပါ";
+    btn.disabled = false; btn.textContent = "Order တင်မယ်";
+    return;
+  }
+
+  const methodLabel = VIP_SELECTED_METHOD === "kbz" ? "KBZ Pay" : "Wave Pay";
+  const msg = `🎰 <b>VIP Order (2D Site)</b>\n` +
+    `👤 Name: ${escapeHtml(VIP_NAME || "")}\n` +
+    `🔑 VIP Key: ${escapeHtml(VIP_ID || "")}\n` +
+    `📱 Phone: ${escapeHtml(VIP_PHONE || "")}\n` +
+    `💰 Amount: ${escapeHtml(VIP_PRICE)} Ks\n` +
+    `💳 Method: ${methodLabel}`;
+  await tgSendOrder(msg, upload.url);
+
+  btn.textContent = "ပို့ပြီးပါပြီ ✓";
+  showToast("Order ပို့ပြီးပါပြီ — Admin approve စောင့်ပါ");
+  setTimeout(() => { closeVipOrderModal(); }, 900);
+}
+
+/* ---------------- ACCOUNT (Register / Login / Dashboard) — Profile page ---------------- */
+async function refreshUserStatus() {
+  if (!USER_ID) { USER_STATUS = "guest"; updateNotifDot(); return; }
+  try {
+    const data = await dbCheckUser(USER_ID);
+    if (data.success) {
+      USER_STATUS = data.status;
+      if (data.name) { USER_NAME = data.name; localStorage.setItem("user_name", data.name); }
+      if (data.phone) { USER_PHONE = data.phone; localStorage.setItem("user_phone", data.phone); }
+    } else {
+      logoutUser(true);
+    }
+  } catch (e) { /* silent */ }
+  updateNotifDot();
+  renderBooks(); // refresh lock icons if status changed
+  if (document.getElementById("page-profile").classList.contains("active")) renderProfilePage();
+}
+
+function updateNotifDot() {
+  const dot = document.getElementById("notifDot");
+  const hasAccountAlert = USER_STATUS === "pending" || USER_STATUS === "rejected";
+  dot.classList.toggle("show", hasAccountAlert || UNREAD_NOTIF_COUNT > 0);
+}
+
+/* ---------------- NOTIFICATIONS (Realtime) ---------------- */
+let ALL_NOTIFICATIONS = [];
+let UNREAD_NOTIF_COUNT = 0;
+
+function getLastSeenNotifTime() {
+  return localStorage.getItem("last_seen_notif_at") || "1970-01-01T00:00:00Z";
+}
+function setLastSeenNotifTime(iso) {
+  localStorage.setItem("last_seen_notif_at", iso);
+}
+
+function notificationAppliesToMe(n) {
+  // Broadcast (no target) applies to everyone; targeted ones only to the matching account.
+  return !n.target_user_id || n.target_user_id === USER_ID;
+}
+
+async function loadNotificationHistory(isPoll) {
+  try {
+    const { data, error } = await sb
+      .from("notifications")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(30);
+    if (error) throw error;
+    const mine = data.filter(notificationAppliesToMe);
+
+    // Polling ဖြစ်ရင် Notification အသစ် ရောက်လာလား စစ်ပြီး Banner ပြမယ်
+    if (isPoll && ALL_NOTIFICATIONS.length > 0) {
+      const newestKnownId = ALL_NOTIFICATIONS[0].id;
+      const newOnes = [];
+      for (const n of mine) {
+        if (n.id === newestKnownId) break;
+        newOnes.push(n);
+      }
+      if (newOnes.length > 0) {
+        UNREAD_NOTIF_COUNT += newOnes.length;
+        showNotifBanner(newOnes[0].title, newOnes[0].message);
+      }
+    }
+
+    ALL_NOTIFICATIONS = mine;
+    if (!isPoll) {
+      const lastSeen = getLastSeenNotifTime();
+      UNREAD_NOTIF_COUNT = ALL_NOTIFICATIONS.filter(n => new Date(n.created_at) > new Date(lastSeen)).length;
+    }
+    updateNotifDot();
+  } catch (e) { /* silent */ }
+}
+
+/* ---------------- WEB PUSH (works even when site is closed / tab not open) ---------------- */
+// ဒီ public key က secret မဟုတ်ပါ — client code ထဲ ထားလို့ရပါတယ်
+const PUSH_VAPID_PUBLIC_KEY = "BD5mZvZxgLCGJk4FJCYVsIPv7We-O0dhRlIWIK29UDKDViXVUeCPR-e2NOD_UhjYEJLkQzmyjfq27qleIkMNpUY";
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; i++) outputArray[i] = rawData.charCodeAt(i);
+  return outputArray;
+}
+
+let _pushSetupInFlight = false;
+async function trySetupWebPush(promptIfNeeded) {
+  if (_pushSetupInFlight) return;
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) return; // browser မ support ရင် ဆိတ်ဆိတ်ကျော်မယ်
+  if (Notification.permission === "denied") return; // user ပယ်ချသွားပြီးသားဆို ထပ်မမေးဘူး
+
+  if (Notification.permission === "default") {
+    if (!promptIfNeeded) return; // user gesture (bell click) မဟုတ်ရင် permission ကို auto မမေးဘူး
+  }
+
+  _pushSetupInFlight = true;
+  try {
+    const reg = await navigator.serviceWorker.register("/sw.js");
+    await navigator.serviceWorker.ready;
+
+    if (Notification.permission === "default") {
+      const perm = await Notification.requestPermission();
+      if (perm !== "granted") { _pushSetupInFlight = false; return; }
+    }
+    if (Notification.permission !== "granted") { _pushSetupInFlight = false; return; }
+
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(PUSH_VAPID_PUBLIC_KEY),
+      });
+    }
+
+    const json = sub.toJSON();
+    await sb.from("push_subscriptions").upsert({
+      user_id: USER_ID || null,
+      endpoint: json.endpoint,
+      p256dh: json.keys.p256dh,
+      auth: json.keys.auth,
+    }, { onConflict: "endpoint" });
+  } catch (e) {
+    /* silent — push setup ၏ failure က ပုံမှန် (in-app) notification ကို မထိခိုက်စေပါ */
+  } finally {
+    _pushSetupInFlight = false;
+  }
+}
+
+// Permission ကို ခွင့်ပြုပြီးသားဆိုရင် (browser တစ်ခြားခေါက်ဝင်လာလည်း) ပြန် subscribe အောင်လုပ်ပေးမယ် — ဆိတ်ဆိတ်
+// Permission မေးရသေးဘူးဆိုရင်တော့ site ဝင်တာနဲ့ auto-prompt လုပ်ပေးမယ်
+if ("serviceWorker" in navigator && "PushManager" in window) {
+  if (Notification.permission === "granted") {
+    trySetupWebPush(false);
+  } else if (Notification.permission === "default") {
+    setTimeout(() => trySetupWebPush(true), 1500);
+  }
+}
+
+function openNotificationsModal() {
+  // Bell ကို click တာက user gesture ဆိုတော့ ဒီအချိန်မှာ permission popup မေးဖို့ အသင့်တော်ဆုံးပါ
+  trySetupWebPush(true);
+
+  const body = document.getElementById("notifListBody");
+  if (ALL_NOTIFICATIONS.length === 0) {
+    body.innerHTML = `<p style="color:var(--muted); font-size:13.5px; text-align:center; padding:30px 0;">Notification မရှိသေးပါ</p>`;
+  } else {
+    body.innerHTML = ALL_NOTIFICATIONS.map(n => `
+      <div class="notif-item">
+        <p class="notif-item-title">${escapeHtml(n.title)}</p>
+        <p class="notif-item-msg">${escapeHtml(n.message)}</p>
+        <p class="notif-item-time">${new Date(n.created_at).toLocaleString()}</p>
+      </div>`).join("");
+  }
+  document.getElementById("notifOverlay").classList.add("open");
+  hideNotifBanner();
+
+  // Mark all as read
+  if (ALL_NOTIFICATIONS.length > 0) {
+    setLastSeenNotifTime(ALL_NOTIFICATIONS[0].created_at);
+    UNREAD_NOTIF_COUNT = 0;
+    updateNotifDot();
+  }
+}
+function closeNotificationsModal() { document.getElementById("notifOverlay").classList.remove("open"); }
+
+/* ---------------- NOTIFICATION SOUND ---------------- */
+// Web Audio API နဲ့ chime sound ဖန်တီးထားတာမို့ external file/internet မလိုပါ။
+let _notifAudioCtx = null;
+function getNotifAudioCtx() {
+  if (!_notifAudioCtx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (Ctx) _notifAudioCtx = new Ctx();
+  }
+  return _notifAudioCtx;
+}
+// Browser autoplay policy အရ user တစ်ခါ page ကို touch/click လုပ်ပြီးမှသာ
+// audio play ရမှာမို့ first interaction မှာ AudioContext ကို unlock လုပ်ထားမယ်
+function unlockNotifAudio() {
+  const ctx = getNotifAudioCtx();
+  if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
+}
+["click", "touchstart", "keydown"].forEach(evt => {
+  window.addEventListener(evt, unlockNotifAudio, { once: true, passive: true });
+});
+
+function playNotifSound() {
+  try {
+    const ctx = getNotifAudioCtx();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+
+    const now = ctx.currentTime;
+    // ချိုသာတဲ့ two-tone "ding" chime
+    [880, 1318.51].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      const start = now + i * 0.12;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.22, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.55);
+    });
+  } catch (e) { /* silent — sound is a nice-to-have, never block notifications */ }
+}
+
+let notifBannerTimer = null;
+function showNotifBanner(title, message) {
+  document.getElementById("notifBannerTitle").textContent = title;
+  document.getElementById("notifBannerMsg").textContent = message;
+  const banner = document.getElementById("notifBanner");
+  banner.classList.add("show");
+  playNotifSound();
+  clearTimeout(notifBannerTimer);
+  notifBannerTimer = setTimeout(hideNotifBanner, 6000);
+}
+function hideNotifBanner() {
+  document.getElementById("notifBanner").classList.remove("show");
+}
+
+// Realtime (Supabase channel/websocket) အစား Polling သုံးထားတယ် — Concurrent
+// connection limit (Free tier 200) ကို လုံးဝရှောင်ဖို့ + User အများကြီးရှိလည်း
+// scale ကျယ်အောင်ဖြစ်ပါတယ်။ 15 စက္ကန့်တစ်ခါ Check လုပ်မယ်။
+function pollNotifications() {
+  loadNotificationHistory(true);
+}
+
+async function handleRefreshStatusClick() {
+  const btn = document.getElementById("refreshStatusBtn");
+  if (!btn) return;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin-small" style="border-color:rgba(91,79,232,0.25); border-top-color:var(--primary);"></span> Status စစ်နေသည်...`;
+  await refreshUserStatus();
+  showToast("Status အသစ် ရယူပြီးပါပြီ");
+}
+
+function renderProfilePage() {
+  const el = document.getElementById("profileContent");
+
+  if (!USER_ID) {
+    el.innerHTML = `
+      <div class="profile-header">
+        <div class="profile-avatar">👤</div>
+        <p class="profile-name">Guest</p>
+        <p class="profile-sub">Premium စာအုပ်ဖတ်ဖို့ အကောင့်ဝင်ပါ</p>
+      </div>
+      <div class="profile-section">
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Login ဝင်မယ်</div>
+          <div class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">အကောင့်အသစ်ဖွင့်မယ်</div>
+        </div>
+        <div id="authFormArea"></div>
+      </div>`;
+    switchAuthTab("login");
+    return;
+  }
+
+  const initial = (USER_NAME || "U").charAt(0).toUpperCase();
+  let statusLabel = "Free Account";
+  let statusClass = "guest";
+  let statusIcon = "🆓";
+  if (USER_STATUS === "pending") { statusLabel = "Pending — Admin စစ်ဆေးနေဆဲ"; statusClass = "pending"; statusIcon = "⏳"; }
+  if (USER_STATUS === "approved") { statusLabel = "Premium Unlocked ✓"; statusClass = "approved"; statusIcon = "👑"; }
+  if (USER_STATUS === "rejected") { statusLabel = "ငြင်းပယ်ခံရသည်"; statusClass = "rejected"; statusIcon = "⏳"; }
+
+  el.innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar">${escapeHtml(initial)}</div>
+      <p class="profile-name">${escapeHtml(USER_NAME || "Account")}</p>
+      <p class="profile-sub">${escapeHtml(USER_ID)}</p>
+      <span class="status-chip ${statusClass}">${statusIcon} ${statusLabel}</span>
+    </div>
+
+    <div class="profile-section">
+      <h3>Premium Unlock</h3>
+      <p class="desc-text">
+        Premium စာအုပ်များကို ဖတ်ရှုနိုင်ရန် အောက်ပါ Form ကို ဖြည့်ပြီး Payment Screenshot
+        တင်ပေးပါ။ Admin approve လုပ်ပေးလိုက်ရင် ဒီအကောင့်နဲ့ Login ဝင်တဲ့နေရာတိုင်းမှာ
+        Premium စာအုပ်အားလုံး Unlock ဖြစ်နေပါလိမ့်မယ်။
+      </p>
+      <div class="id-highlight">
+        <div class="label">သင့် User ID</div>
+        <div class="value">${escapeHtml(USER_ID)}</div>
+      </div>
+      <button class="btn btn-primary full" onclick="openPremiumOrderModal()">Premium ဝင်မယ်</button>
+    </div>
+
+    <div class="profile-section">
+      <button class="btn btn-outline full" id="refreshStatusBtn" onclick="handleRefreshStatusClick()">Status အသစ် စစ်မယ်</button>
+    </div>
+
+    <div class="profile-section">
+      <button class="btn full" style="background:#fde9e9; color:#c13a3a;" onclick="logoutUser()">Logout ထွက်မယ်</button>
+    </div>`;
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll(".auth-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+  const area = document.getElementById("authFormArea");
+  if (tab === "login") {
+    area.innerHTML = `
+      <div class="form-field"><label>ဖုန်းနံပါတ်</label><input type="text" id="loginPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="form-field"><label>Password</label><input type="password" id="loginPw" placeholder="••••••••" onkeydown="if(event.key==='Enter') submitLogin()"></div>
+      <div class="form-error" id="authError"></div>
+      <button class="btn btn-primary full" id="loginSubmitBtn" onclick="submitLogin()">Login ဝင်မယ်</button>
+    `;
+  } else {
+    area.innerHTML = `
+      <div class="form-field"><label>အမည်</label><input type="text" id="regName" placeholder="သင့်အမည်"></div>
+      <div class="form-field"><label>ဖုန်းနံပါတ်</label><input type="text" id="regPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="form-field"><label>Password</label><input type="password" id="regPw" placeholder="အနည်းဆုံး ၄ လုံး" onkeydown="if(event.key==='Enter') submitRegister()"></div>
+      <div class="form-error" id="authError"></div>
+      <button class="btn btn-primary full" id="registerSubmitBtn" onclick="submitRegister()">အကောင့်ဖွင့်မယ်</button>
+    `;
+  }
+}
+
+async function submitRegister() {
+  const name = document.getElementById("regName").value.trim();
+  const phone = document.getElementById("regPhone").value.trim();
+  const pw = document.getElementById("regPw").value;
+  const err = document.getElementById("authError");
+  const btn = document.getElementById("registerSubmitBtn");
+  err.textContent = "";
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin-small"></span> အကောင့်ဖွင့်နေသည်...`;
+
+  const data = await dbRegisterUser(name, phone, pw);
+
+  btn.disabled = false;
+  btn.textContent = "အကောင့်ဖွင့်မယ်";
+
+  if (!data.success) { err.textContent = data.message || "မအောင်မြင်ပါ"; return; }
+
+  USER_ID = data.userId;
+  USER_NAME = data.name;
+  USER_PHONE = data.phone || phone;
+  USER_STATUS = data.status;
+  localStorage.setItem("user_id", USER_ID);
+  localStorage.setItem("user_name", USER_NAME);
+  localStorage.setItem("user_phone", USER_PHONE);
+  updateNotifDot();
+  showToast("အကောင့်ဖွင့်ပြီးပါပြီ");
+  renderProfilePage();
+  renderBooks();
+  loadNotificationHistory();
+}
+
+async function submitLogin() {
+  const phone = document.getElementById("loginPhone").value.trim();
+  const pw = document.getElementById("loginPw").value;
+  const err = document.getElementById("authError");
+  const btn = document.getElementById("loginSubmitBtn");
+  err.textContent = "";
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin-small"></span> Login ဝင်နေသည်...`;
+
+  const data = await dbLoginUser(phone, pw);
+
+  btn.disabled = false;
+  btn.textContent = "Login ဝင်မယ်";
+
+  if (!data.success) { err.textContent = data.message || "မအောင်မြင်ပါ"; return; }
+
+  USER_ID = data.userId;
+  USER_NAME = data.name;
+  USER_PHONE = data.phone || phone;
+  USER_STATUS = data.status;
+  localStorage.setItem("user_id", USER_ID);
+  localStorage.setItem("user_name", USER_NAME);
+  localStorage.setItem("user_phone", USER_PHONE);
+  updateNotifDot();
+  showToast("Login ဝင်ပြီးပါပြီ");
+  renderProfilePage();
+  renderBooks();
+  loadNotificationHistory(); // targeted notifications depend on USER_ID, so refresh after login
+}
+
+function copyUserId() {
+  navigator.clipboard.writeText(USER_ID).then(() => showToast("User ID ကို Copy ကူးပြီးပါပြီ"));
+}
+
+function logoutUser(silent) {
+  USER_ID = null; USER_NAME = null; USER_PHONE = null; USER_STATUS = "guest";
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("user_name");
+  localStorage.removeItem("user_phone");
+  updateNotifDot();
+  renderBooks();
+  loadNotificationHistory();
+  if (!silent) { renderProfilePage(); showToast("Logout ထွက်ပြီးပါပြီ"); }
+}
+
+/* ---------------- 2D VIP ACCOUNT (Register / Login / Dashboard) ---------------- */
+async function refreshVipStatus() {
+  if (!VIP_ID) { VIP_STATUS = "guest"; return; }
+  try {
+    const data = await dbCheckVipUser(VIP_ID);
+    if (data.success) {
+      VIP_STATUS = data.status;
+      if (data.name) { VIP_NAME = data.name; localStorage.setItem("twod_vip_name", data.name); }
+      if (data.phone) { VIP_PHONE = data.phone; localStorage.setItem("twod_vip_phone", data.phone); }
+    } else {
+      logoutVipUser(true);
+    }
+  } catch (e) { /* silent */ }
+  twodRenderGiftCards(); // refresh lock state on VIP posts if status changed
+  if (document.getElementById("twodVipContent") && document.getElementById("twodVipContent").classList.contains("active")) {
+    renderVipPage();
+  }
+}
+
+function renderVipPage() {
+  const el = document.getElementById("twodVipContentInner");
+  if (!el) return;
+
+  if (!VIP_ID) {
+    el.innerHTML = `
+      <div class="twod-vip-header">
+        <div class="twod-vip-avatar">👑</div>
+        <p class="twod-vip-name">Guest</p>
+        <p class="twod-vip-sub">VIP 2D ဂဏန်းလက်ဆောင် Post ဖတ်ဖို့ VIP Key ရယူပါ</p>
+      </div>
+      <div class="twod-vip-panel">
+        <div class="twod-vip-auth-tabs">
+          <div class="twod-vip-auth-tab active" data-viptab="login" onclick="switchVipAuthTab('login')">Login ဝင်မယ်</div>
+          <div class="twod-vip-auth-tab" data-viptab="register" onclick="switchVipAuthTab('register')">VIP Key အသစ်ယူမယ်</div>
+        </div>
+        <div id="vipAuthFormArea"></div>
+      </div>`;
+    switchVipAuthTab("login");
+    return;
+  }
+
+  const initial = (VIP_NAME || "V").charAt(0).toUpperCase();
+  let statusLabel = "Free Account";
+  let statusClass = "guest";
+  let statusIcon = "🆓";
+  if (VIP_STATUS === "pending") { statusLabel = "Pending — Admin စစ်ဆေးနေဆဲ"; statusClass = "pending"; statusIcon = "⏳"; }
+  if (VIP_STATUS === "approved") { statusLabel = "VIP Unlocked ✓"; statusClass = "approved"; statusIcon = "👑"; }
+  if (VIP_STATUS === "rejected") { statusLabel = "ငြင်းပယ်ခံရသည်"; statusClass = "rejected"; statusIcon = "⏳"; }
+
+  el.innerHTML = `
+    <div class="twod-vip-header">
+      <div class="twod-vip-avatar">${escapeHtml(initial)}</div>
+      <p class="twod-vip-name">${escapeHtml(VIP_NAME || "VIP Account")}</p>
+      <p class="twod-vip-sub">${escapeHtml(VIP_ID)}</p>
+      <span class="twod-vip-status-chip ${statusClass}">${statusIcon} ${statusLabel}</span>
+    </div>
+
+    <div class="twod-vip-panel">
+      <h3>VIP Unlock</h3>
+      <p class="desc-text">
+        VIP 2D ဂဏန်းလက်ဆောင် Post များကို ဖတ်ရှုနိုင်ရန် အောက်ပါ Form ကို ဖြည့်ပြီး
+        Payment Screenshot တင်ပေးပါ။ Admin approve လုပ်ပေးလိုက်ရင် ဒီအကောင့်နဲ့
+        Login ဝင်တဲ့နေရာတိုင်းမှာ VIP Post အားလုံး Unlock ဖြစ်နေပါလိမ့်မယ်။
+      </p>
+      <div class="twod-vip-id-highlight">
+        <div class="label">သင့် VIP Key</div>
+        <div class="value">${escapeHtml(VIP_ID)}</div>
+      </div>
+      <button class="twod-vip-btn primary" onclick="openVipOrderModal()">VIP ဝင်မယ်</button>
+    </div>
+
+    <div class="twod-vip-panel">
+      <button class="twod-vip-btn outline" id="vipRefreshStatusBtn" onclick="handleVipRefreshStatusClick()">Status အသစ် စစ်မယ်</button>
+    </div>
+
+    <div class="twod-vip-panel">
+      <button class="twod-vip-btn danger" onclick="logoutVipUser()">Logout ထွက်မယ်</button>
+    </div>`;
+}
+
+function switchVipAuthTab(tab) {
+  document.querySelectorAll(".twod-vip-auth-tab").forEach(t => t.classList.toggle("active", t.dataset.viptab === tab));
+  const area = document.getElementById("vipAuthFormArea");
+  if (tab === "login") {
+    area.innerHTML = `
+      <div class="twod-vip-field"><label>ဖုန်းနံပါတ်</label><input type="text" id="vipLoginPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="twod-vip-field"><label>Password</label><input type="password" id="vipLoginPw" placeholder="••••••••" onkeydown="if(event.key==='Enter') submitVipLogin()"></div>
+      <div class="twod-vip-error" id="vipAuthError"></div>
+      <button class="twod-vip-btn primary" id="vipLoginSubmitBtn" onclick="submitVipLogin()">Login ဝင်မယ်</button>
+    `;
+  } else {
+    area.innerHTML = `
+      <div class="twod-vip-field"><label>အမည်</label><input type="text" id="vipRegName" placeholder="သင့်အမည်"></div>
+      <div class="twod-vip-field"><label>ဖုန်းနံပါတ်</label><input type="text" id="vipRegPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="twod-vip-field"><label>Password</label><input type="password" id="vipRegPw" placeholder="အနည်းဆုံး ၄ လုံး" onkeydown="if(event.key==='Enter') submitVipRegister()"></div>
+      <div class="twod-vip-error" id="vipAuthError"></div>
+      <button class="twod-vip-btn primary" id="vipRegisterSubmitBtn" onclick="submitVipRegister()">VIP Key ယူမယ်</button>
+    `;
+  }
+}
+
+async function submitVipRegister() {
+  const name = document.getElementById("vipRegName").value.trim();
+  const phone = document.getElementById("vipRegPhone").value.trim();
+  const pw = document.getElementById("vipRegPw").value;
+  const err = document.getElementById("vipAuthError");
+  const btn = document.getElementById("vipRegisterSubmitBtn");
+  err.textContent = "";
+  btn.disabled = true;
+  btn.innerHTML = `<span class="twod-vip-spin"></span> VIP Key ယူနေသည်...`;
+
+  const data = await dbRegisterVipUser(name, phone, pw);
+
+  btn.disabled = false;
+  btn.textContent = "VIP Key ယူမယ်";
+
+  if (!data.success) { err.textContent = data.message || "မအောင်မြင်ပါ"; return; }
+
+  VIP_ID = data.vipId;
+  VIP_NAME = data.name;
+  VIP_PHONE = data.phone || phone;
+  VIP_STATUS = data.status;
+  localStorage.setItem("twod_vip_id", VIP_ID);
+  localStorage.setItem("twod_vip_name", VIP_NAME);
+  localStorage.setItem("twod_vip_phone", VIP_PHONE);
+  showToast("VIP Key ရပြီးပါပြီ");
+  renderVipPage();
+  twodRenderGiftCards();
+}
+
+async function submitVipLogin() {
+  const phone = document.getElementById("vipLoginPhone").value.trim();
+  const pw = document.getElementById("vipLoginPw").value;
+  const err = document.getElementById("vipAuthError");
+  const btn = document.getElementById("vipLoginSubmitBtn");
+  err.textContent = "";
+  btn.disabled = true;
+  btn.innerHTML = `<span class="twod-vip-spin"></span> Login ဝင်နေသည်...`;
+
+  const data = await dbLoginVipUser(phone, pw);
+
+  btn.disabled = false;
+  btn.textContent = "Login ဝင်မယ်";
+
+  if (!data.success) { err.textContent = data.message || "မအောင်မြင်ပါ"; return; }
+
+  VIP_ID = data.vipId;
+  VIP_NAME = data.name;
+  VIP_PHONE = data.phone || phone;
+  VIP_STATUS = data.status;
+  localStorage.setItem("twod_vip_id", VIP_ID);
+  localStorage.setItem("twod_vip_name", VIP_NAME);
+  localStorage.setItem("twod_vip_phone", VIP_PHONE);
+  showToast("Login ဝင်ပြီးပါပြီ");
+  renderVipPage();
+  twodRenderGiftCards();
+}
+
+function copyVipKey() {
+  navigator.clipboard.writeText(VIP_ID).then(() => showToast("VIP Key ကို Copy ကူးပြီးပါပြီ"));
+}
+
+function logoutVipUser(silent) {
+  VIP_ID = null; VIP_NAME = null; VIP_PHONE = null; VIP_STATUS = "guest";
+  localStorage.removeItem("twod_vip_id");
+  localStorage.removeItem("twod_vip_name");
+  localStorage.removeItem("twod_vip_phone");
+  twodRenderGiftCards();
+  if (!silent) { renderVipPage(); showToast("Logout ထွက်ပြီးပါပြီ"); }
+}
+
+async function handleVipRefreshStatusClick() {
+  const btn = document.getElementById("vipRefreshStatusBtn");
+  if (!btn) return;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="twod-vip-spin"></span> Status စစ်နေသည်...`;
+  await refreshVipStatus();
+  showToast("Status အသစ် ရယူပြီးပါပြီ");
+}
+
+let PREMIUM_PRICE = "0";
+let KBZ_NAME = "", KBZ_NUMBER = "", WAVE_NAME = "", WAVE_NUMBER = "";
+
+async function loadSettings() {
+  try {
+    const data = await dbGetSettings();
+    if (data.success && data.telegramLink) TELEGRAM_LINK = sanitizeTelegramLink(data.telegramLink);
+    if (data.success) {
+      PREMIUM_PRICE = data.premiumPrice || "0";
+      KBZ_NAME = data.kbzName || ""; KBZ_NUMBER = data.kbzNumber || "";
+      WAVE_NAME = data.waveName || ""; WAVE_NUMBER = data.waveNumber || "";
+    }
+  } catch (e) { /* silent */ }
+  initBannerSlider();
+}
+
+/* ---------------- IMAGE SLIDER (Banner) ---------------- */
+let bannerSlideIndex = 0;
+let bannerSlideTimer = null;
+
+async function initBannerSlider() {
+  const res = await dbGetBannerSlides();
+  const slides = (res.slides || []).filter(s => s.image_url);
+  const wrap = document.getElementById("bannerSlider");
+  const track = document.getElementById("bannerSliderTrack");
+  const dots = document.getElementById("bannerSliderDots");
+  if (!slides.length) { wrap.style.display = "none"; return; }
+
+  track.innerHTML = slides.map(s => `<img src="${escapeHtml(s.image_url)}" alt="banner" ${s.link_url ? `onclick="window.open('${escapeHtml(s.link_url)}','_blank')"` : ""}>`).join("");
+  dots.innerHTML = slides.map((_, i) => `<span class="dot ${i === 0 ? "active" : ""}" onclick="goToBannerSlide(${i})"></span>`).join("");
+  wrap.style.display = "block";
+  bannerSlideIndex = 0;
+
+  if (bannerSlideTimer) clearInterval(bannerSlideTimer);
+  if (slides.length > 1) {
+    bannerSlideTimer = setInterval(() => {
+      bannerSlideIndex = (bannerSlideIndex + 1) % slides.length;
+      updateBannerSliderPosition();
+    }, 3500);
+  }
+}
+
+function goToBannerSlide(i) {
+  bannerSlideIndex = i;
+  updateBannerSliderPosition();
+}
+
+function updateBannerSliderPosition() {
+  const track = document.getElementById("bannerSliderTrack");
+  if (!track) return;
+  track.style.transform = `translateX(-${bannerSlideIndex * 100}%)`;
+  document.querySelectorAll("#bannerSliderDots .dot").forEach((d, i) => d.classList.toggle("active", i === bannerSlideIndex));
+}
+
+/* ---------------- 2D LIVE ---------------- */
+const TWOD_API_BASE_URL = 'https://api.thaistock2d.com';
+const TWOD_RESULT_TIMES = [
+  { time: '12:01', hour: 12, minute: 1 },
+  { time: '16:30', hour: 16, minute: 30 }
+];
+let twodPreviousValue = '';
+let twodInitialized = false;
+let twodIntervalsStarted = false;
+
+function twodLiveHtml() {
+  return `
+    <div class="live-close-row">
+      <div class="live-close-btn" onclick="goPage('home')">✕</div>
+    </div>
+
+    <div class="twod-live-content" id="twodLiveContent">
+      <div class="live-main">
+        <div class="live-number-big glow" id="twodLive2d">--</div>
+        <div class="live-status">
+          <span class="refresh-ic">↻</span>
+          <span>Updated: <span id="twodLiveDateTime">--</span></span>
+        </div>
+        <div class="set-value-row">
+          <div class="sv-box">
+            <div class="label">SET</div>
+            <div class="value" id="twodSetIndex">--</div>
+          </div>
+          <div class="sv-box">
+            <div class="label">VALUE</div>
+            <div class="value" id="twodSetValue">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="today-results">
+        <div class="time-card">
+          <div class="time-label">12:01 PM</div>
+          <div class="tc-row">
+            <div class="tc-col"><div class="tc-label">SET</div><div class="tc-value" id="twodSet1201">--</div></div>
+            <div class="tc-col"><div class="tc-label">Value</div><div class="tc-value" id="twodVal1201">--</div></div>
+            <div class="tc-col tc-2d"><div class="tc-label">2D</div><div class="tc-value" id="twodResult1201">--</div></div>
+          </div>
+        </div>
+        <div class="time-card">
+          <div class="time-label">4:30 PM</div>
+          <div class="tc-row">
+            <div class="tc-col"><div class="tc-label">SET</div><div class="tc-value" id="twodSet1630">--</div></div>
+            <div class="tc-col"><div class="tc-label">Value</div><div class="tc-value" id="twodVal1630">--</div></div>
+            <div class="tc-col tc-2d"><div class="tc-label">2D</div><div class="tc-value" id="twodResult1630">--</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; margin:14px 0;">
+        ${adBannerHTML('cb501092e362be3ab4fdd29c1228d4b6', 320, 50)}
+      </div>
+
+      <div class="countdown-section">
+        <div class="countdown-label">နောက်ထွက်ချိန်အထိ</div>
+        <div class="countdown-time" id="twodCountdown">--:--:--</div>
+      </div>
+
+      <div style="margin:14px 0;">
+        ${adNativeHTML()}
+      </div>
+    </div>
+
+    <div class="twod-history-section" id="twodHistoryContent">
+      <table class="twod-history-table">
+        <thead>
+          <tr>
+            <th>ရက်စွဲ</th>
+            <th>12:01 PM</th>
+            <th>4:30 PM</th>
+          </tr>
+        </thead>
+        <tbody id="twodHistoryTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="twod-gift-section" id="twodGiftContent">
+      <div class="twod-gift-filter-row">
+        <button class="twod-gift-filter-chip active" data-giftfilter="all" onclick="twodSetGiftFilter('all')">အားလုံး</button>
+        <button class="twod-gift-filter-chip" data-giftfilter="free" onclick="twodSetGiftFilter('free')">Free</button>
+        <button class="twod-gift-filter-chip" data-giftfilter="vip" onclick="twodSetGiftFilter('vip')">👑 VIP</button>
+      </div>
+      <div class="twod-gift-list" id="twodGiftList">
+        <div class="twod-gift-loading"><div class="spinner" style="width:16px;height:16px;border-width:2px;border-color:rgba(255,255,255,0.25);border-top-color:#ffd700;"></div> Post များ ခေတ္တစောင့်ပါ...</div>
+      </div>
+      <div class="twod-gift-empty" id="twodGiftEmpty" style="display:none;">2D ဂဏန်းလက်ဆောင် Post များ မရှိသေးပါ။</div>
+    </div>
+
+    <div class="twod-vip-section" id="twodVipContent">
+      <div id="twodVipContentInner"></div>
+    </div>
+
+    <div class="twod-tab-bar">
+      <div class="twod-tab-item active" id="twodTabLive" onclick="twodSwitchTab('live')">
+        <div class="tab-icon">📡</div>
+        <div class="tab-label">Live</div>
+      </div>
+      <div class="twod-tab-item" id="twodTabHistory" onclick="twodSwitchTab('history')">
+        <div class="tab-icon">📅</div>
+        <div class="tab-label">History</div>
+      </div>
+      <div class="twod-tab-item" id="twodTabGift" onclick="twodSwitchTab('gift')">
+        <div class="tab-icon">🎁</div>
+        <div class="tab-label">ဂဏန်းလက်ဆောင်</div>
+      </div>
+      <div class="twod-tab-item" id="twodTabVip" onclick="twodSwitchTab('vip')">
+        <div class="tab-icon">👑</div>
+        <div class="tab-label">VIP</div>
+      </div>
+    </div>
+  `;
+}
+
+function initTwodLive() {
+  const root = document.getElementById("twodLiveRoot");
+  if (!twodInitialized) {
+    root.innerHTML = twodLiveHtml();
+    twodInitialized = true;
+  }
+  twodUpdateLive2D();
+  twodUpdateCountdown();
+  refreshVipStatus();
+  if (!twodIntervalsStarted) {
+    setInterval(twodPollTick, 3000);
+    setInterval(twodUpdateCountdown, 1000);
+    setInterval(refreshVipStatus, 15000); // VIP approve ဖြစ်လာရင် auto-detect
+    twodIntervalsStarted = true;
+  }
+}
+
+function twodIsNearResultTime() {
+  // 12:00:30–12:04:00 နှင့် 16:29:30–16:33:00 ကြားထဲမှာ API ကနေ ဂဏန်း update ခနစောင့်နေတတ်လို့
+  // ပိုမြန်မြန် (2 sec) poll လုပ်ဖို့ window ဖွင့်ပေးထားတယ်
+  const now = new Date();
+  const offsetMin = 6.5 * 60 - now.getTimezoneOffset();
+  const mm = new Date(now.getTime() + offsetMin * 60000);
+  const mins = mm.getHours() * 60 + mm.getMinutes() + mm.getSeconds() / 60;
+  const windows = [[12 * 60 + 0.5, 12 * 60 + 4], [16 * 60 + 29.5, 16 * 60 + 33]];
+  return windows.some(([s, e]) => mins >= s && mins <= e);
+}
+
+let twodLastPollTs = 0;
+function twodPollTick() {
+  const nearResult = twodIsNearResultTime();
+  const now = Date.now();
+  const interval = nearResult ? 2000 : 5000;
+  if (now - twodLastPollTs < interval) return;
+  twodLastPollTs = now;
+  twodUpdateLive2D();
+}
+
+function twodSwitchTab(tab) {
+  const liveContent = document.getElementById('twodLiveContent');
+  const historyContent = document.getElementById('twodHistoryContent');
+  const giftContent = document.getElementById('twodGiftContent');
+  const vipContent = document.getElementById('twodVipContent');
+  const tabLive = document.getElementById('twodTabLive');
+  const tabHistory = document.getElementById('twodTabHistory');
+  const tabGift = document.getElementById('twodTabGift');
+  const tabVip = document.getElementById('twodTabVip');
+
+  liveContent.classList.add('hidden');
+  historyContent.classList.remove('active');
+  giftContent.classList.remove('active');
+  vipContent.classList.remove('active');
+  tabLive.classList.remove('active');
+  tabHistory.classList.remove('active');
+  tabGift.classList.remove('active');
+  tabVip.classList.remove('active');
+
+  if (tab === 'live') {
+    liveContent.classList.remove('hidden');
+    tabLive.classList.add('active');
+  } else if (tab === 'history') {
+    historyContent.classList.add('active');
+    tabHistory.classList.add('active');
+    twodUpdateHistoryResults();
+  } else if (tab === 'gift') {
+    giftContent.classList.add('active');
+    tabGift.classList.add('active');
+    twodLoadGiftCards();
+  } else if (tab === 'vip') {
+    vipContent.classList.add('active');
+    tabVip.classList.add('active');
+    renderVipPage();
+  }
+}
+
+async function twodFetchData(endpoint) {
+  try {
+    const response = await fetch(`${TWOD_API_BASE_URL}/${endpoint}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error);
+    return null;
+  }
+}
+
+function twodTriggerHeartbeat() {
+  const el = document.getElementById('twodLive2d');
+  if (!el) return;
+  el.classList.remove('glow');
+  el.classList.remove('heartbeat');
+  void el.offsetWidth;
+  el.classList.add('heartbeat');
+  setTimeout(() => {
+    el.classList.remove('heartbeat');
+    el.classList.add('glow');
+  }, 1000);
+}
+
+function twodIsFreezeWindow() {
+  // 12:01 ဂဏန်းထွက်ပြီးရင် 12:10 အထိ (11:59:30 ကလည်း safe margin) Live ဂဏန်းကို ရပ်ထားမယ်
+  // 4:30 ဂဏန်းလည်း အလားတူ 4:39 အထိ ရပ်ထားမယ်
+  const now = new Date();
+  const offsetMin = 6.5 * 60 - now.getTimezoneOffset();
+  const mm = new Date(now.getTime() + offsetMin * 60000);
+  const mins = mm.getHours() * 60 + mm.getMinutes() + mm.getSeconds() / 60;
+  const windows = [[12 * 60 + 1, 12 * 60 + 10], [16 * 60 + 30, 16 * 60 + 39]];
+  return windows.some(([s, e]) => mins >= s && mins <= e);
+}
+
+async function twodUpdateLive2D() {
+  if (twodIsFreezeWindow()) return; // ဂဏန်းထွက်ချိန် ကျော်သွားရင် နောက် Live ဂဏန်း မပြောင်းတော့ပါ
+  const data = await twodFetchData('live');
+  if (data && data.live) {
+    let twod = data.live.twod;
+    const liveEl = document.getElementById('twodLive2d');
+    if (!liveEl) return;
+
+    if (twod === '--' && data.result && data.result.length > 0) {
+      const lastResult = data.result[data.result.length - 1];
+      twod = lastResult.twod || '--';
+    }
+
+    if (twod !== twodPreviousValue && twod !== '--') {
+      liveEl.textContent = twod;
+      twodTriggerHeartbeat();
+      twodPreviousValue = twod;
+    } else if (twodPreviousValue === '') {
+      liveEl.textContent = twod;
+      twodPreviousValue = twod;
+    }
+
+    document.getElementById('twodSetIndex').textContent = data.live.set || '--';
+    document.getElementById('twodSetValue').textContent = data.live.value || '--';
+
+    if (data.live.time && data.live.time !== '--') {
+      const dt = new Date(data.live.time.replace(' ', 'T'));
+      if (!isNaN(dt.getTime())) {
+        document.getElementById('twodLiveDateTime').textContent = dt.toLocaleString('en-US', {
+          month: '2-digit', day: '2-digit', year: 'numeric',
+          hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+        });
+      } else {
+        document.getElementById('twodLiveDateTime').textContent = data.live.date || '--';
+      }
+    } else if (data.server_time) {
+      const dt = new Date(data.server_time.replace(' ', 'T'));
+      if (!isNaN(dt.getTime())) {
+        document.getElementById('twodLiveDateTime').textContent = dt.toLocaleString('en-US', {
+          month: '2-digit', day: '2-digit', year: 'numeric',
+          hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+        });
+      } else {
+        document.getElementById('twodLiveDateTime').textContent = data.server_time;
+      }
+    }
+
+    if (data.result) {
+      const resultsFound = { '12:01:00': false, '16:30:00': false };
+      data.result.forEach(r => {
+        if (r.open_time === '12:01:00') {
+          document.getElementById('twodResult1201').textContent = r.twod || '--';
+          document.getElementById('twodSet1201').textContent = r.set || '--';
+          document.getElementById('twodVal1201').textContent = r.value || '--';
+          resultsFound['12:01:00'] = true;
+        }
+        if (r.open_time === '16:30:00') {
+          document.getElementById('twodResult1630').textContent = r.twod || '--';
+          document.getElementById('twodSet1630').textContent = r.set || '--';
+          document.getElementById('twodVal1630').textContent = r.value || '--';
+          resultsFound['16:30:00'] = true;
+        }
+      });
+
+      // API ဆီက result ပေါက်ချိန်ရောက်ပေမယ့် data ကမရသေးရင် "ခဏစောင့်ပါ" ပြပေးမယ်
+      if (!resultsFound['12:01:00'] && twodPastResultTime(12, 1)) {
+        const el = document.getElementById('twodResult1201');
+        if ((el.textContent || '').trim() === '--') el.textContent = '⏳';
+      }
+      if (!resultsFound['16:30:00'] && twodPastResultTime(16, 30)) {
+        const el = document.getElementById('twodResult1630');
+        if ((el.textContent || '').trim() === '--') el.textContent = '⏳';
+      }
+    }
+  }
+}
+
+function twodPastResultTime(hour, minute) {
+  const now = new Date();
+  const offsetMin = 6.5 * 60 - now.getTimezoneOffset();
+  const mm = new Date(now.getTime() + offsetMin * 60000);
+  const target = hour * 60 + minute;
+  const cur = mm.getHours() * 60 + mm.getMinutes();
+  return cur >= target && cur <= target + 20; // ထွက်ချိန်ကနေ ၂၀ မိနစ်အတွင်း
+}
+
+async function twodUpdateHistoryResults() {
+  const data = await twodFetchData('2d_result');
+  const historyTableBody = document.getElementById('twodHistoryTableBody');
+  historyTableBody.innerHTML = '';
+
+  if (data && data.length > 0) {
+    data.forEach(dayResult => {
+      const date = dayResult.date || '';
+      const resultsByTime = {};
+      if (dayResult.child) {
+        dayResult.child.forEach(res => {
+          resultsByTime[res.time] = res.twod;
+        });
+      }
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${date}</td>
+        <td style="font-size:1.3em;">${resultsByTime['12:01:00'] || '--'}</td>
+        <td style="font-size:1.3em;">${resultsByTime['16:30:00'] || '--'}</td>
+      `;
+      historyTableBody.appendChild(row);
+    });
+  }
+}
+
+let twodGiftCardsLoaded = false;
+let ALL_TWOD_GIFT_CARDS = [];
+let TWOD_GIFT_FILTER = "all"; // all | free | vip
+
+async function twodLoadGiftCards() {
+  const listEl = document.getElementById('twodGiftList');
+  const emptyEl = document.getElementById('twodGiftEmpty');
+  listEl.innerHTML = `<div class="twod-gift-loading"><div class="spinner" style="width:16px;height:16px;border-width:2px;border-color:rgba(255,255,255,0.25);border-top-color:#ffd700;"></div> Post များ ခေတ္တစောင့်ပါ...</div>`;
+  emptyEl.style.display = "none";
+
+  try {
+    const { data, error } = await sb2d.from("gift_cards").select("*").order("created_at", { ascending: false });
+    if (error) throw error;
+    ALL_TWOD_GIFT_CARDS = data || [];
+    twodRenderGiftCards();
+  } catch (e) {
+    listEl.innerHTML = `<div class="twod-gift-loading">Post များ ဆွဲယူ၍ မရပါ</div>`;
+  }
+}
+
+function twodSetGiftFilter(f) {
+  TWOD_GIFT_FILTER = f;
+  document.querySelectorAll(".twod-gift-filter-chip").forEach(b => b.classList.toggle("active", b.dataset.giftfilter === f));
+  twodRenderGiftCards();
+}
+
+function twodRenderGiftCards() {
+  const listEl = document.getElementById('twodGiftList');
+  const emptyEl = document.getElementById('twodGiftEmpty');
+  if (!listEl) return;
+
+  const list = ALL_TWOD_GIFT_CARDS.filter(g => {
+    const type = (g.type || "free").toLowerCase();
+    return TWOD_GIFT_FILTER === "all" || type === TWOD_GIFT_FILTER;
+  });
+
+  if (list.length === 0) {
+    listEl.innerHTML = "";
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+  listEl.innerHTML = list.map(twodGiftCardHtml).join("");
+}
+
+const TWOD_GIFT_DEFAULT_AVATAR = "data:image/svg+xml;utf8," + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a237e"/>
+      <stop offset="1" stop-color="#1565c0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="40" cy="40" r="40" fill="url(#g)"/>
+  <text x="40" y="52" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="900"
+        fill="#ffd700" text-anchor="middle">2D</text>
+</svg>`);
+const TWOD_GIFT_PAGE_NAME = "2D ဂဏန်းလက်ဆောင်";
+
+function twodGiftCardHtml(g) {
+  const dateStr = g.created_at ? new Date(g.created_at).toLocaleString() : "";
+  const isVip = (g.type || "free").toLowerCase() === "vip";
+  const pageName = isVip ? "2D Member" : "2D Free";
+  const tagHtml = `<span class="twod-gift-tag ${isVip ? 'vip' : 'free'}">${isVip ? '👑 VIP' : 'Free'}</span>`;
+
+  const imgHtml = g.image_url
+    ? `<div class="twod-gift-card-img"><img src="${escapeHtml(g.image_url)}" alt=""></div>`
+    : "";
+
+  const vipJoinBtn = (isVip && VIP_STATUS !== "approved")
+    ? `<div class="twod-gift-vip-joinrow"><button onclick="twodSwitchTab('vip')">👑 VIP ဝင်မယ် ›</button></div>`
+    : "";
+
+  return `
+    <div class="twod-gift-card">
+      <div class="twod-gift-card-header">
+        <div class="twod-gift-card-avatar"><img src="${TWOD_GIFT_DEFAULT_AVATAR}" alt=""></div>
+        <div class="twod-gift-card-headertext">
+          <div class="twod-gift-card-pagename">${pageName}</div>
+          <div class="twod-gift-card-time">${escapeHtml(dateStr)}</div>
+        </div>
+      </div>
+      <div class="twod-gift-card-body">
+        <div style="margin-bottom:4px;">${tagHtml}</div>
+        <div class="twod-gift-card-title">${escapeHtml(g.title || "")}</div>
+        <div class="twod-gift-card-desc">${escapeHtml(g.description || "")}</div>
+      </div>
+      ${imgHtml}
+      ${vipJoinBtn}
+    </div>`;
+}
+
+function twodUpdateCountdown() {
+  const el = document.getElementById('twodCountdown');
+  if (!el) return;
+  const now = new Date();
+  const myanmarOffset = 6.5 * 60;
+  const localOffset = now.getTimezoneOffset();
+  const myanmarTime = new Date(now.getTime() + (myanmarOffset + localOffset) * 60000);
+
+  let nextResultTime = null;
+
+  for (const rt of TWOD_RESULT_TIMES) {
+    const resultDateTime = new Date(myanmarTime);
+    resultDateTime.setHours(rt.hour, rt.minute, 0, 0);
+    if (resultDateTime > myanmarTime) {
+      nextResultTime = resultDateTime;
+      break;
+    }
+  }
+
+  if (!nextResultTime) {
+    nextResultTime = new Date(myanmarTime);
+    nextResultTime.setDate(myanmarTime.getDate() + 1);
+    nextResultTime.setHours(TWOD_RESULT_TIMES[0].hour, TWOD_RESULT_TIMES[0].minute, 0, 0);
+  }
+
+  const diff = nextResultTime - myanmarTime;
+
+  if (diff > 0) {
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    el.textContent =
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  } else {
+    el.textContent = 'ယခုထွက်ရှိနေသည်';
+  }
+}
+
+let VIP_PRICE = "0";
+let VIP_KBZ_NAME = "", VIP_KBZ_NUMBER = "", VIP_WAVE_NAME = "", VIP_WAVE_NUMBER = "";
+
+async function loadVipSettings() {
+  try {
+    const data = await dbGetVipSettings();
+    if (data.success) {
+      VIP_PRICE = data.vipPrice || "0";
+      VIP_KBZ_NAME = data.kbzName || ""; VIP_KBZ_NUMBER = data.kbzNumber || "";
+      VIP_WAVE_NAME = data.waveName || ""; VIP_WAVE_NUMBER = data.waveNumber || "";
+    }
+  } catch (e) { /* silent */ }
+}
+
+/* ---------------- INIT ---------------- */
+document.getElementById("bookOverlay").addEventListener("click", e => { if (e.target.id === "bookOverlay") closeBook(); });
+document.getElementById("videoOverlay").addEventListener("click", e => { if (e.target.id === "videoOverlay") closeVideo(); });
+document.getElementById("notifOverlay").addEventListener("click", e => { if (e.target.id === "notifOverlay") closeNotificationsModal(); });
+document.getElementById("premiumOverlay").addEventListener("click", e => { if (e.target.id === "premiumOverlay") closePremiumOrderModal(); });
+document.getElementById("vipOrderOverlay").addEventListener("click", e => { if (e.target.id === "vipOrderOverlay") closeVipOrderModal(); });
+
+loadSettings();
+loadVipSettings();
+loadBooks();
+loadVideos();
+refreshUserStatus();
+refreshVipStatus();
+loadNotificationHistory();
+setInterval(pollNotifications, 15000); // Realtime websocket အစား Polling သုံးထား (connection limit ရှောင်ဖို့)
+setInterval(refreshUserStatus, 15000); // Premium approve ဖြစ်လာရင် auto-detect
+
+/* ---------------- BACK BUTTON HANDLING ---------------- */
+// Modal ဖွင့်ထားရင် Back ကို modal ပိတ်ဖို့ပဲ သုံးမယ်၊ Website ထဲက ထွက်ဖို့ဆို 2 ကြိမ် Back နှိပ်မှ ထွက်မယ်
+(function () {
+  const ALL_OVERLAY_IDS = ["videoOverlay", "vipOrderOverlay", "bookOverlay", "premiumOverlay", "notifOverlay"];
+
+  function getOpenOverlay() {
+    for (const id of ALL_OVERLAY_IDS) {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains("open")) return id;
+    }
+    return null;
+  }
+
+  function closeOverlayById(id) {
+    if (id === "videoOverlay") closeVideo();
+    else if (id === "vipOrderOverlay") closeVipOrderModal();
+    else if (id === "bookOverlay") closeBook();
+    else if (id === "premiumOverlay") closePremiumOrderModal();
+    else if (id === "notifOverlay") closeNotificationsModal();
+  }
+
+  function trapHistory() {
+    history.pushState({ appTrap: true }, "", location.href);
+  }
+
+  let exitArmed = false;
+  let exitTimer = null;
+
+  window.addEventListener("popstate", function () {
+    const openId = getOpenOverlay();
+
+    if (openId) {
+      // Modal/Overlay ပွင့်နေရင် Website ထဲကနေ မထွက်စေဘဲ Modal ကိုပဲ ပိတ်ပေး
+      closeOverlayById(openId);
+      trapHistory();
+      return;
+    }
+
+    if (!exitArmed) {
+      // ပထမအကြိမ် Back — Toast ပြပြီး Website ထဲမှာပဲထားမယ်
+      exitArmed = true;
+      showToast("နောက်တစ်ကြိမ် Back နှိပ်ပါက Website မှ ထွက်ပါမည်");
+      trapHistory();
+      clearTimeout(exitTimer);
+      exitTimer = setTimeout(() => { exitArmed = false; }, 2000);
+      return;
+    }
+
+    // ဒုတိယအကြိမ် Back (2 စက္ကန့်အတွင်း) — Website ထဲက အမှန်တကယ် ထွက်ခွင့်ပြု
+  });
+
+  // Base state တစ်ခု စောင့်ထားမှ ပထမ Back ကို ဖမ်းလို့ရမယ်
+  trapHistory();
+})();
+
+/* ---------------- PWA INSTALL (Add to Home Screen) ---------------- */
+(function () {
+  let deferredPrompt = null;
+  const section = document.getElementById("installAppSection");
+  const btn = document.getElementById("installAppBtn");
+  const popup = document.getElementById("installPopup");
+  const popupBtn = document.getElementById("installPopupBtn");
+  const popupClose = document.getElementById("installPopupClose");
+
+  const DISMISS_KEY = "twod_install_dismissed_at";
+  const DISMISS_DAYS = 3; // ပိတ်လိုက်ရင် ဒီရက်ကြာမှ ပြန်ပေါ်မယ်
+
+  function isDismissedRecently() {
+    const t = localStorage.getItem(DISMISS_KEY);
+    if (!t) return false;
+    const days = (Date.now() - Number(t)) / (1000 * 60 * 60 * 24);
+    return days < DISMISS_DAYS;
+  }
+
+  function showPopup() {
+    if (isDismissedRecently()) return;
+    if (popup) popup.classList.add("show");
+    if (section) section.style.display = "block";
+  }
+
+  function hidePopup() {
+    if (popup) popup.classList.remove("show");
+    if (section) section.style.display = "none";
+  }
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(showPopup, 1500); // Page load ပြီး 1.5s အကြာမှ auto ပေါ်စေမယ်
+  });
+
+  async function doInstall() {
+    if (!deferredPrompt) {
+      showToast("ဒီ Browser/Device မှာ Install လုပ်ခြင်းကို Support မလုပ်ပါ");
+      return;
+    }
+    deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    if (choice.outcome === "accepted") {
+      showToast("App ကို Home Screen ထဲ ထည့်ပေးပါပြီ 🎉");
+    }
+    deferredPrompt = null;
+    hidePopup();
+  }
+
+  if (btn) btn.addEventListener("click", doInstall);
+  if (popupBtn) popupBtn.addEventListener("click", doInstall);
+
+  if (popupClose) {
+    popupClose.addEventListener("click", () => {
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+      hidePopup();
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    hidePopup();
+    showToast("Dr.X Hub App ကို Install လုပ်ပြီးပါပြီ 🎉");
+  });
+
+  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+    hidePopup();
+  }
+
+  if ("serviceWorker" in navigator) {
+
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+})();
+</script>
+
+
+<!-- Adsterra: Popunder -->
+<script src="https://pl30424234.effectivecpmnetwork.com/6c/c6/2f/6cc62fc95d3e0d1eafa72c8dcf8c6b37.js"></script>
+
+<!-- Adsterra: Social Bar (global) -->
+<script src="https://pl30424236.effectivecpmnetwork.com/86/a8/4d/86a84dce10d5919f17172217759be319.js"></script>
+</body>
+</html>
